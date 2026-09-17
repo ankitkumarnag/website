@@ -1,0 +1,12 @@
+.env
+.env.local
+.env.production
+**/.env
+**/.env.local
+**/node_modules/
+frontend/dist/
+backend/uploads/
+backend/users.json
+backend/complaints.json
+*.log
+.DS_Store

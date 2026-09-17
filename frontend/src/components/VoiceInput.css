@@ -1,0 +1,101 @@
+.voice-input-panel {
+  margin: 12px 0 18px;
+  padding: 16px;
+  background: #eef8f4;
+  border: 1px solid #bad9ce;
+  border-radius: 13px;
+}
+
+.voice-input-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.voice-input-controls select {
+  min-height: 48px;
+  padding: 0 13px;
+  color: #133a35;
+  background: #ffffff;
+  border: 1px solid #bed4cd;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+}
+
+.voice-input-controls select:focus {
+  border-color: #089b72;
+}
+
+.voice-button {
+  min-height: 48px;
+  padding: 0 17px;
+  color: #ffffff;
+  background: #087c61;
+  border: 0;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.voice-button:hover {
+  background: #05634e;
+  transform: translateY(-1px);
+}
+
+.voice-button.listening {
+  background: #d33f36;
+  animation: voice-pulse 1.3s infinite;
+}
+
+.voice-button span {
+  font-size: 20px;
+}
+
+.voice-message {
+  margin: 12px 0 5px;
+  color: #24584e;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.voice-input-panel small {
+  color: #6b817c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@keyframes voice-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(211, 63, 54, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(211, 63, 54, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(211, 63, 54, 0);
+  }
+}
+
+@media (max-width: 600px) {
+  .voice-input-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .voice-input-controls select,
+  .voice-button {
+    width: 100%;
+  }
+}
