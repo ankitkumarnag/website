@@ -5,7 +5,7 @@ const path = require("path");
 const multer = require("multer");
 const crypto = require("crypto");
 const dotenv = require("dotenv");
-const nodemailer = require("nodemailer");
+const https = require("https");
 const twilio = require("twilio");
 
 /*
@@ -64,14 +64,16 @@ const pendingCitizenRegistrations = new Map();
 const otpSendHistory = new Map();
 const citizenLoginAttempts = new Map();
 
-const EMAIL_HOST = String(process.env.EMAIL_HOST || "").trim();
-const EMAIL_PORT = Number(process.env.EMAIL_PORT || 587);
-const EMAIL_SECURE =
-  String(process.env.EMAIL_SECURE || "false").toLowerCase() === "true";
-const EMAIL_USER = String(process.env.EMAIL_USER || "").trim();
-const EMAIL_PASS = String(process.env.EMAIL_PASS || "");
+const BREVO_API_KEY = String(
+  process.env.BREVO_API_KEY || ""
+).trim();
+
 const EMAIL_FROM = String(
-  process.env.EMAIL_FROM || EMAIL_USER || "NagarSwar AI"
+  process.env.EMAIL_FROM || ""
+).trim();
+
+const EMAIL_FROM_NAME = String(
+  process.env.EMAIL_FROM_NAME || "NagarSwar AI"
 ).trim();
 
 const TWILIO_ACCOUNT_SID = String(
@@ -318,10 +320,7 @@ function maskPhone(phone) {
 
 function isEmailOtpConfigured() {
   return Boolean(
-    EMAIL_HOST &&
-      EMAIL_PORT &&
-      EMAIL_USER &&
-      EMAIL_PASS &&
+    BREVO_API_KEY &&
       EMAIL_FROM
   );
 }
@@ -334,27 +333,73 @@ function isMobileOtpConfigured() {
   );
 }
 
-let emailTransporter = null;
 let twilioClient = null;
 
-function getEmailTransporter() {
-  if (!isEmailOtpConfigured()) {
-    return null;
-  }
+function sendBrevoTransactionalEmail(payload) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify(payload);
 
-  if (!emailTransporter) {
-    emailTransporter = nodemailer.createTransport({
-      host: EMAIL_HOST,
-      port: EMAIL_PORT,
-      secure: EMAIL_SECURE,
-      auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS,
+    const request = https.request(
+      {
+        hostname: "api.brevo.com",
+        port: 443,
+        path: "/v3/smtp/email",
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "api-key": BREVO_API_KEY,
+          "content-type": "application/json",
+          "content-length": Buffer.byteLength(body),
+        },
+        timeout: 15000,
       },
-    });
-  }
+      (response) => {
+        let responseBody = "";
 
-  return emailTransporter;
+        response.on("data", (chunk) => {
+          responseBody += chunk;
+        });
+
+        response.on("end", () => {
+          const statusCode = response.statusCode || 500;
+
+          if (statusCode >= 200 && statusCode < 300) {
+            return resolve(responseBody);
+          }
+
+          let providerMessage = "";
+
+          try {
+            const parsed = JSON.parse(responseBody || "{}");
+            providerMessage = parsed.message || parsed.code || "";
+          } catch {
+            providerMessage = "";
+          }
+
+          reject(
+            new Error(
+              providerMessage
+                ? `Email provider rejected the request: ${providerMessage}`
+                : `Email provider returned HTTP ${statusCode}.`
+            )
+          );
+        });
+      }
+    );
+
+    request.on("timeout", () => {
+      request.destroy(
+        new Error("Email provider request timed out.")
+      );
+    });
+
+    request.on("error", (error) => {
+      reject(error);
+    });
+
+    request.write(body);
+    request.end();
+  });
 }
 
 function getTwilioClient() {
@@ -373,22 +418,27 @@ function getTwilioClient() {
 }
 
 async function sendEmailOtp(email, otp) {
-  const transporter = getEmailTransporter();
-
-  if (!transporter) {
+  if (!isEmailOtpConfigured()) {
     throw new Error(
       "Email OTP is not configured on the backend."
     );
   }
 
-  await transporter.sendMail({
-    from: EMAIL_FROM,
-    to: email,
+  await sendBrevoTransactionalEmail({
+    sender: {
+      name: EMAIL_FROM_NAME,
+      email: EMAIL_FROM,
+    },
+    to: [
+      {
+        email,
+      },
+    ],
     subject: "NagarSwar AI citizen verification code",
-    text:
+    textContent:
       `Your NagarSwar AI verification code is ${otp}. ` +
       "It expires in 5 minutes. Do not share this code with anyone.",
-    html: `
+    htmlContent: `
       <div style="font-family:Arial,sans-serif;line-height:1.6;color:#17343d">
         <h2>NagarSwar AI verification</h2>
         <p>Your one-time verification code is:</p>
@@ -1219,7 +1269,7 @@ app.post("/api/citizen/register/request-otp", async (req, res) => {
       return res.status(503).json({
         success: false,
         message:
-          "Email OTP service is not configured yet. Configure the email settings in backend .env.",
+          "Email OTP service is not configured yet. Add BREVO_API_KEY and EMAIL_FROM to the backend environment.",
       });
     }
 
@@ -2487,7 +2537,7 @@ async function startServer() {
       );
       console.log(
         isEmailOtpConfigured()
-          ? "✉️ Email OTP: ON"
+          ? "✉️ Email OTP: ON (Brevo HTTPS API)"
           : "⚠️ Email OTP: NOT CONFIGURED"
       );
       console.log(
