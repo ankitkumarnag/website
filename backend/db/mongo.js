@@ -1,6 +1,13 @@
 const {
   MongoClient,
 } = require("mongodb");
+const dns = require("dns");
+
+try {
+  dns.setServers(["8.8.8.8", "8.8.4.4", "1.1.1.1"]);
+} catch (_e) {
+  // Ignore if custom DNS fails
+}
 
 let client = null;
 let database = null;

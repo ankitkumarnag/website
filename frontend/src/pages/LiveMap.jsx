@@ -12,6 +12,7 @@ import {
 import "leaflet/dist/leaflet.css";
 
 import { getAllComplaints } from "../services/api";
+import Icon from "../components/Icons";
 
 import "./LiveMap.css";
 
@@ -282,44 +283,44 @@ function LiveMap() {
 
         <section className="live-map-legend">
           <span>
-            <i className="legend-road" />
+            <Icon name="road" size={14} style={{ color: "#f59e0b" }} />
             Road
           </span>
 
           <span>
-            <i className="legend-water" />
+            <Icon name="droplet" size={14} style={{ color: "#38bdf8" }} />
             Water
           </span>
 
           <span>
-            <i className="legend-sanitation" />
+            <Icon name="trash" size={14} style={{ color: "#10b981" }} />
             Sanitation
           </span>
 
           <span>
-            <i className="legend-electricity" />
+            <Icon name="zap" size={14} style={{ color: "#eab308" }} />
             Electricity
           </span>
 
           <span>
-            <i className="legend-health" />
+            <Icon name="activity" size={14} style={{ color: "#06b6d4" }} />
             Healthcare
           </span>
 
           <span>
-            <i className="legend-fire" />
+            <Icon name="flame" size={14} style={{ color: "#f43f5e" }} />
             Emergency
           </span>
 
           <span>
-            <i className="legend-other" />
+            <Icon name="building" size={14} style={{ color: "#94a3b8" }} />
             Other
           </span>
         </section>
 
         {loading ? (
           <section className="live-map-message">
-            <div>🗺️</div>
+            <Icon name="loader" size={38} className="spin-slow" />
 
             <h2>
               Loading city map...
@@ -332,7 +333,7 @@ function LiveMap() {
           </section>
         ) : error ? (
           <section className="live-map-message">
-            <div>⚠️</div>
+            <Icon name="alert-triangle" size={38} style={{ color: "#f87171" }} />
 
             <h2>
               Unable to load map data

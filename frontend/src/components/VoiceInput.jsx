@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import Icon from "./Icons";
 import "./VoiceInput.css";
 
 const speechLanguages = [
-  { value: "en-IN", label: "English" },
-  { value: "hi-IN", label: "हिन्दी" },
-  { value: "or-IN", label: "ଓଡ଼ିଆ" },
+  { value: "en-IN", label: "English (India)" },
+  { value: "hi-IN", label: "हिन्दी (Hindi)" },
+  { value: "or-IN", label: "ଓଡ଼ିଆ (Odia)" },
 ];
 
 function getInitialLanguage() {
@@ -23,7 +24,7 @@ function VoiceInput({ onTranscript }) {
   const [language, setLanguage] = useState(getInitialLanguage);
   const [isListening, setIsListening] = useState(false);
   const [message, setMessage] = useState(
-    "Select your language and press the microphone."
+    "Select your language and tap the microphone to dictate your complaint."
   );
 
   const recognitionRef = useRef(null);
@@ -40,7 +41,7 @@ function VoiceInput({ onTranscript }) {
 
     if (!SpeechRecognition) {
       setMessage(
-        "Voice typing is not supported in this browser. Please use Google Chrome."
+        "Voice input is not supported in this browser. Please use Chrome or Edge."
       );
       return;
     }
@@ -59,7 +60,7 @@ function VoiceInput({ onTranscript }) {
 
     recognition.onstart = () => {
       setIsListening(true);
-      setMessage("Listening… Speak your complaint clearly.");
+      setMessage("Listening… Speak clearly in your selected language.");
     };
 
     recognition.onresult = (event) => {
@@ -81,30 +82,30 @@ function VoiceInput({ onTranscript }) {
       }
 
       if (temporaryTranscript) {
-        setMessage(`Listening: ${temporaryTranscript}`);
+        setMessage(`Transcribing: "${temporaryTranscript}"`);
       }
 
       if (finalTranscript.trim()) {
         onTranscript(finalTranscript.trim());
-        setMessage("Voice converted to text. Please review it before submitting.");
+        setMessage("Speech converted to text successfully. You can edit it above.");
       }
     };
 
     recognition.onerror = (event) => {
       const errorMessages = {
         "not-allowed":
-          "Microphone permission was blocked. Please allow microphone access.",
+          "Microphone access was denied. Please allow microphone permission in browser settings.",
         "audio-capture":
-          "No microphone was detected on this device.",
+          "No microphone detected on this device.",
         "no-speech":
-          "No speech was detected. Please try again and speak clearly.",
+          "No speech was detected. Please try again and speak closer to the mic.",
         network:
-          "Speech service could not connect. Check your internet connection.",
+          "Speech recognition network error. Please check your internet connection.",
       };
 
       setMessage(
         errorMessages[event.error] ||
-          "Voice recognition failed. Please try again."
+          "Voice transcription encountered an error. Please try again."
       );
 
       setIsListening(false);
@@ -126,12 +127,10 @@ function VoiceInput({ onTranscript }) {
           value={language}
           onChange={(event) => setLanguage(event.target.value)}
           aria-label="Select speech language"
+          className="voice-language-select"
         >
           {speechLanguages.map((speechLanguage) => (
-            <option
-              value={speechLanguage.value}
-              key={speechLanguage.value}
-            >
+            <option value={speechLanguage.value} key={speechLanguage.value}>
               {speechLanguage.label}
             </option>
           ))}
@@ -142,17 +141,19 @@ function VoiceInput({ onTranscript }) {
           className={isListening ? "voice-button listening" : "voice-button"}
           onClick={startListening}
         >
-          <span>🎙️</span>
-          {isListening ? "Stop Listening" : "Speak Complaint"}
+          <Icon name={isListening ? "mic-off" : "mic"} size={18} strokeWidth={2} />
+          <span>{isListening ? "Stop Recording" : "Voice Dictate"}</span>
         </button>
       </div>
 
-      <p className="voice-message">{message}</p>
+      <div className="voice-feedback">
+        <Icon name={isListening ? "sparkles" : "info"} size={15} className="voice-feedback-icon" />
+        <span className="voice-message">{message}</span>
+      </div>
 
-      <small>
-        Your spoken text will appear in the description box. Review it before
-        submitting the complaint.
-      </small>
+      <p className="voice-caption">
+        Dictated speech will automatically append into the description box.
+      </p>
     </div>
   );
 }

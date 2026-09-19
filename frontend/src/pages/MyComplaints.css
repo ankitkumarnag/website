@@ -1,176 +1,224 @@
+/* ==========================================================================
+   Citizen Complaints Tracking - Dark High-Trust Design System
+   ========================================================================== */
+
 .track-page {
   min-height: 100vh;
-  background: #f1f7f5;
-  color: #0b2834;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-body);
 }
 
 .track-navbar {
-  min-height: 82px;
-  padding: 0 6%;
-  background: #ffffff;
-  border-bottom: 1px solid #dce8e4;
+  min-height: 72px;
+  padding: 0 5%;
+  background: #0f2942;
+  border-bottom: 3px solid var(--gov-saffron);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(15, 41, 66, 0.15);
 }
 
 .track-logo {
-  color: #092c3a;
-  font-size: 30px;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 24px;
   font-weight: 800;
+  letter-spacing: -0.5px;
   text-decoration: none;
-  letter-spacing: -1px;
 }
 
 .track-logo span {
-  color: #08a678;
+  color: var(--gov-saffron);
 }
 
 .track-home-link {
-  color: #365c67;
-  font-size: 16px;
-  font-weight: 700;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 600;
   text-decoration: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.15s ease;
 }
 
 .track-home-link:hover {
-  color: #07966e;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .track-main {
-  width: min(1180px, 90%);
+  width: min(1200px, 92%);
   margin: 0 auto;
-  padding: 48px 0 80px;
+  padding: 36px 0 80px;
 }
 
+/* ==========================================================================
+   Tracking Hero Section
+   ========================================================================== */
+
 .track-heading {
-  padding: 48px;
-  border-radius: 26px;
+  padding: 40px;
+  border-radius: var(--radius-xl);
   color: #ffffff;
   background:
-    radial-gradient(circle at top right, rgba(44, 213, 159, 0.25), transparent 38%),
-    linear-gradient(135deg, #082f40, #07594f);
-  box-shadow: 0 20px 50px rgba(5, 50, 57, 0.16);
+    radial-gradient(circle at 85% 20%, rgba(217, 83, 30, 0.22), transparent 45%),
+    linear-gradient(135deg, #0f2942 0%, #091a2b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 3px solid var(--gov-saffron);
+  box-shadow: 0 10px 30px rgba(15, 41, 66, 0.12);
 }
 
 .track-label {
-  margin: 0 0 13px;
-  color: #5ef0bd;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 3px;
+  margin: 0 0 10px;
+  color: #ff8c5a;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
 }
 
 .track-heading h1 {
   margin: 0;
-  font-size: clamp(36px, 5vw, 58px);
-  line-height: 1.08;
-  letter-spacing: -2px;
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: #ffffff;
 }
 
 .track-heading > p:not(.track-label) {
-  max-width: 610px;
-  margin: 18px 0 0;
-  color: #d9eeea;
-  font-size: 18px;
-  line-height: 1.7;
+  max-width: 600px;
+  margin: 12px 0 0;
+  color: #cbd5e1;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .track-controls {
-  margin-top: 32px;
+  margin-top: 26px;
   display: flex;
-  gap: 14px;
+  gap: 12px;
 }
 
 .track-controls input {
   width: 100%;
-  min-height: 56px;
-  padding: 0 20px;
-  color: #102f39;
+  min-height: 48px;
+  padding: 0 18px;
+  color: #0f172a;
   background: #ffffff;
-  border: 2px solid transparent;
-  border-radius: 13px;
-  font-size: 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
   outline: none;
+  transition: all 0.2s ease;
 }
 
 .track-controls input:focus {
-  border-color: #26c697;
+  border-color: var(--gov-saffron);
+  box-shadow: 0 0 0 3px rgba(217, 83, 30, 0.2);
 }
 
 .new-report-button {
-  min-width: 205px;
-  min-height: 56px;
-  padding: 0 22px;
-  color: #062d34;
-  background: #59e6b5;
-  border-radius: 13px;
+  min-width: 190px;
+  min-height: 48px;
+  padding: 0 20px;
+  color: #ffffff;
+  background: var(--gov-saffron);
+  border-radius: var(--radius-md);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
   text-decoration: none;
-  transition: 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(217, 83, 30, 0.35);
+  white-space: nowrap;
 }
 
 .new-report-button:hover {
-  background: #ffffff;
-  transform: translateY(-2px);
+  background: #c44312;
+  transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   Complaints List & Card View
+   ========================================================================== */
+
 .complaints-section {
-  margin-top: 35px;
+  margin-top: 28px;
 }
 
 .empty-complaints {
-  padding: 70px 25px;
-  background: #ffffff;
-  border: 1px solid #dce8e4;
-  border-radius: 22px;
+  padding: 60px 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
   text-align: center;
-  box-shadow: 0 14px 40px rgba(13, 65, 65, 0.07);
-}
-
-.empty-icon {
-  margin-bottom: 15px;
-  font-size: 48px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .empty-complaints h2 {
-  margin: 0 0 10px;
-  font-size: 27px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .empty-complaints p {
-  margin: 0 0 25px;
-  color: #668087;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  max-width: 440px;
 }
 
 .empty-complaints a {
-  padding: 13px 21px;
+  margin-top: 10px;
+  padding: 10px 20px;
   color: #ffffff;
-  background: #079b72;
-  border-radius: 10px;
-  display: inline-block;
+  background: var(--gov-saffron);
+  border-radius: var(--radius-md);
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .complaints-list {
   display: grid;
-  gap: 22px;
+  gap: 20px;
 }
 
 .complaint-track-card {
-  padding: 30px;
+  padding: 28px;
   background: #ffffff;
-  border: 1px solid #dce8e4;
-  border-radius: 22px;
-  box-shadow: 0 14px 40px rgba(13, 65, 65, 0.07);
+  border: 1px solid #e2e8f0;
+  border-top: 4px solid var(--gov-navy);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 16px rgba(15, 41, 66, 0.06);
+  transition: all 0.2s ease;
+}
+
+.complaint-track-card:hover {
+  box-shadow: 0 8px 24px rgba(15, 41, 66, 0.12);
+  border-color: #cbd5e1;
 }
 
 .complaint-card-top {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -179,43 +227,50 @@
 
 .complaint-category,
 .complaint-status {
-  padding: 8px 13px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
 }
 
 .complaint-category {
-  color: #087557;
-  background: #e1f7ef;
+  color: var(--gov-navy);
+  background: rgba(15, 41, 66, 0.08);
+  border: 1px solid rgba(15, 41, 66, 0.2);
 }
 
 .complaint-status {
-  color: #a86600;
-  background: #fff1cc;
+  color: var(--gov-saffron);
+  background: rgba(217, 83, 30, 0.1);
+  border: 1px solid rgba(217, 83, 30, 0.25);
 }
 
 .complaint-track-card h2 {
-  margin: 0 0 10px;
-  color: #0a2b38;
-  font-size: 28px;
+  margin: 0 0 8px;
+  color: var(--gov-navy);
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .complaint-description {
   margin: 0;
-  color: #617981;
-  font-size: 16px;
-  line-height: 1.7;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .complaint-information {
-  margin: 26px 0;
-  padding: 22px;
-  background: #f5f9f8;
-  border-radius: 15px;
+  margin: 20px 0;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
+  gap: 16px;
 }
 
 .complaint-information div {
@@ -223,99 +278,128 @@
 }
 
 .complaint-information span {
-  margin-bottom: 7px;
-  color: #789097;
+  margin-bottom: 5px;
+  color: #64748b;
   display: block;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .complaint-information strong {
-  color: #173a44;
+  color: var(--gov-navy);
   display: block;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
   overflow-wrap: anywhere;
 }
 
+/* ==========================================================================
+   Horizontal Timeline Stepper
+   ========================================================================== */
+
 .status-tracker {
-  padding: 20px 10px 4px;
+  padding: 18px 6px 8px;
   display: flex;
   align-items: center;
 }
 
 .tracker-step {
   min-width: 90px;
-  color: #91a3a7;
+  color: #64748b;
   text-align: center;
 }
 
 .tracker-step span {
-  width: 38px;
-  height: 38px;
-  margin: 0 auto 8px;
-  background: #e3ebe9;
+  width: 34px;
+  height: 34px;
+  margin: 0 auto 6px;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  transition: all 0.2s ease;
 }
 
 .tracker-step p {
   margin: 0;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .tracker-step.completed,
 .tracker-step.active {
-  color: #078d69;
+  color: var(--gov-navy);
 }
 
-.tracker-step.completed span,
+.tracker-step.completed span {
+  color: #ffffff;
+  background: var(--gov-green);
+  border-color: var(--gov-green);
+}
+
 .tracker-step.active span {
   color: #ffffff;
-  background: #0aaa7d;
-}
-
-.tracker-step.active span {
-  box-shadow: 0 0 0 7px #dff6ee;
+  background: var(--gov-saffron);
+  border-color: var(--gov-saffron);
+  box-shadow: 0 0 0 5px rgba(217, 83, 30, 0.2);
 }
 
 .tracker-line {
-  height: 3px;
-  margin: 0 10px;
-  background: #dce6e3;
+  height: 2px;
+  margin: 0 8px;
+  background: #e2e8f0;
   flex: 1;
-  transform: translateY(-13px);
+  transform: translateY(-12px);
 }
 
 .tracker-line.active {
-  background: #0aaa7d;
+  background: var(--gov-green);
+}
+
+.view-details-button {
+  width: fit-content;
+  margin: 12px 0 0 auto;
+  padding: 10px 18px;
+  color: var(--gov-navy);
+  background: rgba(15, 41, 66, 0.06);
+  border: 1px solid rgba(15, 41, 66, 0.18);
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.view-details-button:hover {
+  background: var(--gov-navy);
+  color: #ffffff;
+  border-color: var(--gov-navy);
 }
 
 @media (max-width: 800px) {
   .track-navbar {
-    min-height: 70px;
-    padding: 0 5%;
-  }
-
-  .track-logo {
-    font-size: 25px;
+    min-height: 64px;
+    padding: 0 4%;
   }
 
   .track-main {
-    width: 92%;
-    padding-top: 25px;
+    width: 94%;
+    padding-top: 20px;
   }
 
   .track-heading {
-    padding: 32px 22px;
-    border-radius: 19px;
-  }
-
-  .track-heading h1 {
-    letter-spacing: -1px;
+    padding: 26px 20px;
   }
 
   .track-controls {
@@ -327,7 +411,7 @@
   }
 
   .complaint-track-card {
-    padding: 22px;
+    padding: 20px;
   }
 
   .complaint-information {
@@ -335,42 +419,14 @@
   }
 
   .tracker-step {
-    min-width: 65px;
+    min-width: 60px;
   }
 
   .tracker-step p {
-    font-size: 11px;
+    font-size: 10px;
   }
 
-  .tracker-line {
-    margin: 0 3px;
-  }
-}
-.view-details-button {
-  width: fit-content;
-  margin: 8px 0 0 auto;
-  padding: 13px 19px;
-  color: #ffffff;
-  background: #078f69;
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
-  text-decoration: none;
-  transition: 0.2s ease;
-}
-
-.view-details-button:hover {
-  background: #056f54;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(7, 143, 105, 0.22);
-}
-
-@media (max-width: 800px) {
   .view-details-button {
     width: 100%;
-    margin-top: 15px;
   }
 }

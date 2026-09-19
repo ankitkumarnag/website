@@ -1,38 +1,163 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+
 :root {
-  font-family: "Segoe UI", Inter, Arial, Helvetica, sans-serif;
-  color: #152129;
-  background: #ffffff;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* =========================================================
+     PALETTE 2: REPUBLIC CIVIC & NATIONAL DIGNITY
+     Ashoka Navy (#0f2942), Deep Saffron (#d9531e),
+     Ashoka Forest Green (#1b4332), Soft Alabaster (#f8fafc)
+     ========================================================= */
+  --gov-navy: #0f2942;
+  --gov-navy-dark: #0a1c2e;
+  --gov-navy-light: #183d61;
+  --gov-navy-subtle: rgba(15, 41, 66, 0.08);
+
+  --gov-saffron: #d9531e;
+  --gov-saffron-hover: #bf4212;
+  --gov-saffron-subtle: rgba(217, 83, 30, 0.12);
+  --gov-saffron-glow: rgba(217, 83, 30, 0.28);
+
+  --gov-green: #1b4332;
+  --gov-green-light: #15803d;
+  --gov-green-subtle: rgba(27, 67, 50, 0.12);
+
+  /* Surfaces & Backgrounds */
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-hover: #f1f5f9;
+  --bg-glass: rgba(255, 255, 255, 0.94);
+  --bg-glass-card: rgba(255, 255, 255, 0.98);
+
+  /* Text colors (High-Contrast WCAG AAA Readability) */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  /* Accent Colors (National Dignity Palette) */
+  --accent-primary: #d9531e;
+  --accent-primary-hover: #bf4212;
+  --accent-primary-subtle: rgba(217, 83, 30, 0.12);
+  --accent-primary-glow: rgba(217, 83, 30, 0.28);
+
+  --accent-navy: #0f2942;
+  --accent-navy-subtle: rgba(15, 41, 66, 0.08);
+
+  --accent-green: #15803d;
+  --accent-green-subtle: rgba(21, 128, 61, 0.12);
+
+  --accent-sky: #0284c7;
+  --accent-sky-subtle: rgba(2, 132, 199, 0.12);
+
+  --accent-amber: #d97706;
+  --accent-amber-subtle: rgba(217, 119, 6, 0.12);
+
+  --accent-rose: #dc2626;
+  --accent-rose-subtle: rgba(220, 38, 38, 0.12);
+
+  --accent-indigo: #0f2942;
+  --accent-indigo-subtle: rgba(15, 41, 66, 0.08);
+
+  /* Borders & Dividers */
+  --border-subtle: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-focus: rgba(217, 83, 30, 0.5);
+
+  /* Shadows (Soft & Dignified) */
+  --shadow-sm: 0 1px 3px 0 rgba(15, 41, 66, 0.06), 0 1px 2px -1px rgba(15, 41, 66, 0.04);
+  --shadow-md: 0 4px 14px -2px rgba(15, 41, 66, 0.08), 0 2px 6px -1px rgba(15, 41, 66, 0.04);
+  --shadow-lg: 0 14px 32px -4px rgba(15, 41, 66, 0.12), 0 4px 12px -2px rgba(15, 41, 66, 0.06);
+  --shadow-glow: 0 0 24px -4px var(--accent-primary-glow);
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
   scroll-behavior: smooth;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background-color: var(--bg-app);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #ffffff;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+p {
+  color: var(--text-secondary);
 }
 
 button,
 input,
 textarea,
 select {
-  font: inherit;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 a {
   color: inherit;
+  text-decoration: none;
 }
 
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-app);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }

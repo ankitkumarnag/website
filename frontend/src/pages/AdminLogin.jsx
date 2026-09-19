@@ -133,15 +133,20 @@ function AdminLogin() {
             {loginError && (
               <div
                 style={{
-                  padding: "12px 14px",
-                  color: "#a5281d",
-                  background: "#ffe5e1",
-                  border: "1px solid #efb4ac",
-                  borderRadius: "10px",
-                  fontWeight: "700",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 14px",
+                  color: "#f87171",
+                  background: "rgba(244, 63, 94, 0.1)",
+                  border: "1px solid rgba(244, 63, 94, 0.25)",
+                  borderRadius: "8px",
+                  fontWeight: "600",
+                  fontSize: "13px",
                 }}
               >
-                ⚠️ {loginError}
+                <Icon name="alert-triangle" size={16} style={{ flexShrink: 0 }} />
+                <span>{loginError}</span>
               </div>
             )}
 

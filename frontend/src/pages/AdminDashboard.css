@@ -1,270 +1,482 @@
+/* ==========================================================================
+   Admin Dashboard - Dark High-Trust Design System
+   ========================================================================== */
+
 .admin-page {
   min-height: 100vh;
-  background: #f3f7f5;
-  color: #102f38;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-body);
 }
 
 .admin-navbar {
-  min-height: 78px;
-  padding: 0 6%;
-  background: #ffffff;
-  border-bottom: 1px solid #dce8e4;
+  min-height: 72px;
+  padding: 0 5%;
+  background: #0f2942;
+  border-bottom: 3px solid var(--gov-saffron);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(15, 41, 66, 0.15);
 }
 
 .admin-logo {
-  color: #092c38;
-  font-size: 28px;
-  font-weight: 900;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .admin-logo span {
-  color: #08a678;
+  color: var(--gov-saffron);
 }
 
 .admin-navbar nav {
   display: flex;
-  gap: 25px;
+  align-items: center;
+  gap: 20px;
 }
 
 .admin-navbar nav a {
-  color: #496970;
-  font-weight: 700;
+  color: #cbd5e1;
+  font-weight: 600;
+  font-size: 14px;
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 .admin-navbar nav a:hover {
-  color: #07966e;
+  color: #ffffff;
 }
 
 .admin-main {
-  width: min(1220px, 90%);
+  width: min(1280px, 92%);
   margin: 0 auto;
-  padding: 42px 0 80px;
+  padding: 36px 0 80px;
 }
 
+/* ==========================================================================
+   Admin Hero Section
+   ========================================================================== */
+
 .admin-hero {
-  padding: 38px;
+  padding: 36px 40px;
   color: #ffffff;
   background:
-    radial-gradient(
-      circle at top right,
-      rgba(88, 230, 181, 0.2),
-      transparent 35%
-    ),
-    linear-gradient(135deg, #092d37, #075749);
-  border-radius: 24px;
+    radial-gradient(circle at 85% 20%, rgba(217, 83, 30, 0.22), transparent 45%),
+    linear-gradient(135deg, #0f2942 0%, #091a2b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 3px solid var(--gov-saffron);
+  border-radius: var(--radius-xl);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 25px;
+  gap: 30px;
+  box-shadow: 0 10px 30px rgba(15, 41, 66, 0.12);
 }
 
 .admin-label {
   margin: 0 0 10px;
-  color: #62e7b8;
-  font-size: 13px;
-  font-weight: 900;
+  color: #ff8c5a;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 2px;
 }
 
 .admin-hero h1 {
   margin: 0;
-  font-size: clamp(32px, 5vw, 50px);
-  letter-spacing: -1.5px;
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  color: #ffffff;
 }
 
 .admin-hero > div > p:last-child {
-  max-width: 720px;
-  margin: 14px 0 0;
-  color: #d6e8e4;
+  max-width: 680px;
+  margin: 12px 0 0;
+  color: #cbd5e1;
+  font-size: 15px;
   line-height: 1.6;
 }
 
 .refresh-button {
-  min-width: 150px;
-  padding: 14px 18px;
-  color: #08332e;
-  background: #5ce4b5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 170px;
+  padding: 12px 20px;
+  color: #ffffff;
+  background: var(--gov-saffron);
   border: 0;
-  border-radius: 11px;
-  font-weight: 800;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(217, 83, 30, 0.35);
 }
 
+.refresh-button:hover {
+  transform: translateY(-1px);
+  background: #c44312;
+  box-shadow: 0 6px 20px rgba(217, 83, 30, 0.5);
+}
+
+/* ==========================================================================
+   Admin Telemetry / Stats Grid
+   ========================================================================== */
+
 .admin-stats {
-  margin-top: 25px;
+  margin-top: 24px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
 }
 
 .admin-stats article {
-  padding: 24px;
+  padding: 20px;
   background: #ffffff;
-  border: 1px solid #dde9e6;
-  border-radius: 17px;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid var(--gov-navy);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 8px rgba(15, 41, 66, 0.05);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-stats article:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 41, 66, 0.1);
 }
 
 .admin-stats span {
-  color: #71888d;
+  color: #64748b;
   display: block;
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .admin-stats strong {
   margin-top: 8px;
-  color: #092e38;
+  color: var(--gov-navy);
   display: block;
-  font-size: 34px;
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 700;
 }
 
+/* ==========================================================================
+   Search & Filtering Controls
+   ========================================================================== */
+
 .admin-tools {
-  margin: 30px 0 22px;
+  margin: 28px 0 24px;
   display: grid;
   grid-template-columns: 1fr 220px;
-  gap: 15px;
+  gap: 14px;
 }
 
 .admin-tools input,
 .admin-tools select {
-  min-height: 52px;
-  padding: 0 17px;
+  min-height: 48px;
+  padding: 0 16px;
   background: #ffffff;
-  border: 1px solid #d5e3df;
-  border-radius: 11px;
-  color: #163840;
-  font-size: 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  color: #0f172a;
+  font-family: var(--font-body);
+  font-size: 14px;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
 .admin-tools input:focus,
 .admin-tools select:focus {
-  border-color: #08a678;
+  border-color: var(--gov-saffron);
+  box-shadow: 0 0 0 3px rgba(217, 83, 30, 0.2);
 }
+
+.admin-tools select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   Complaints Feed & Cards
+   ========================================================================== */
 
 .admin-complaints {
   display: grid;
-  gap: 22px;
+  gap: 20px;
 }
 
 .admin-complaint-card {
-  padding: 29px;
+  padding: 28px;
   background: #ffffff;
-  border: 1px solid #dce8e4;
-  border-radius: 20px;
-  box-shadow: 0 12px 35px rgba(10, 60, 60, 0.06);
+  border: 1px solid #e2e8f0;
+  border-top: 4px solid var(--gov-navy);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 16px rgba(15, 41, 66, 0.06);
+  transition: all 0.2s ease;
+}
+
+.admin-complaint-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 41, 66, 0.12);
 }
 
 .admin-card-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 20px;
 }
 
 .admin-complaint-id {
-  margin: 0 0 7px;
-  color: #06956f;
-  font-size: 13px;
-  font-weight: 900;
+  margin: 0 0 6px;
+  color: var(--gov-saffron);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 1px;
 }
 
 .admin-card-header h2 {
   margin: 0;
-  color: #092e39;
-  font-size: 27px;
+  color: var(--gov-navy);
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
 }
 
 .priority-badge {
   height: fit-content;
-  padding: 8px 14px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 900;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   white-space: nowrap;
 }
 
 .priority-low {
-  color: #38734f;
-  background: #e5f5e9;
+  color: var(--gov-green);
+  background: rgba(27, 67, 50, 0.1);
+  border: 1px solid rgba(27, 67, 50, 0.25);
 }
 
 .priority-medium {
-  color: #9a6900;
-  background: #fff1c4;
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .priority-high {
-  color: #bd6417;
-  background: #ffe4c7;
+  color: var(--gov-saffron);
+  background: rgba(217, 83, 30, 0.12);
+  border: 1px solid rgba(217, 83, 30, 0.25);
 }
 
 .priority-critical {
-  color: #b12d2d;
-  background: #ffe0e0;
+  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
 .admin-description {
-  margin: 17px 0 0;
-  color: #627b81;
-  line-height: 1.7;
+  margin: 14px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
+/* ==========================================================================
+   Evidence Block
+   ========================================================================== */
+
+.admin-evidence {
+  margin-top: 18px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+}
+
+.admin-evidence-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.admin-evidence-heading > div {
+  display: grid;
+  gap: 2px;
+}
+
+.admin-evidence-heading > div > span {
+  color: var(--gov-saffron);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.admin-evidence-heading strong {
+  color: var(--gov-navy);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-evidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  color: var(--gov-green);
+  background: rgba(27, 67, 50, 0.1);
+  border: 1px solid rgba(27, 67, 50, 0.25);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin-evidence-link {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #0d131f;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  cursor: zoom-in;
+}
+
+.admin-evidence-link img {
+  display: block;
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.admin-evidence-link:hover img {
+  transform: scale(1.02);
+  filter: brightness(0.9);
+}
+
+.admin-evidence-overlay {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  color: #ffffff;
+  background: rgba(15, 41, 66, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.admin-evidence-link:hover .admin-evidence-overlay {
+  opacity: 1;
+}
+
+.admin-evidence-meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   Details Grid & Metadata
+   ========================================================================== */
+
 .admin-information-grid {
-  margin-top: 22px;
-  padding: 21px;
-  background: #f5f9f7;
-  border-radius: 14px;
+  margin-top: 20px;
+  padding: 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 18px;
 }
 
 .admin-information-grid span,
 .analysis-box > span,
 .status-update-control label {
-  margin-bottom: 6px;
-  color: #789096;
+  margin-bottom: 5px;
+  color: #64748b;
   display: block;
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 10px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .admin-information-grid strong {
-  color: #173a43;
-  font-size: 14px;
+  color: var(--gov-navy);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .analysis-box {
-  margin-top: 18px;
-  padding: 18px;
-  background: #f4f7ea;
-  border-radius: 13px;
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(217, 83, 30, 0.05);
+  border: 1px solid rgba(217, 83, 30, 0.2);
+  border-radius: var(--radius-md);
 }
 
 .analysis-box ul {
   margin: 8px 0 0;
   padding-left: 20px;
-  color: #536d62;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 .analysis-box li {
-  margin: 5px 0;
+  margin: 4px 0;
 }
+
+/* ==========================================================================
+   Card Actions & Status Form
+   ========================================================================== */
 
 .admin-card-actions {
   margin-top: 22px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 18px;
+  flex-wrap: wrap;
 }
 
 .status-update-control {
@@ -273,55 +485,95 @@
 
 .status-update-control select {
   width: 100%;
-  min-height: 46px;
-  padding: 0 13px;
-  border: 1px solid #ccdeda;
-  border-radius: 10px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
   background: #ffffff;
-  color: #173a43;
-  font-weight: 700;
+  color: #0f172a;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-update-control select:focus {
+  border-color: var(--gov-saffron);
+  outline: none;
 }
 
 .admin-view-button {
-  padding: 13px 18px;
-  color: #ffffff;
-  background: #078f69;
-  border-radius: 10px;
-  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 18px;
+  color: var(--gov-navy);
+  background: rgba(15, 41, 66, 0.06);
+  border: 1px solid rgba(15, 41, 66, 0.18);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
   text-decoration: none;
+  transition: all 0.15s ease;
 }
 
 .admin-view-button:hover {
-  background: #056f54;
+  background: var(--gov-navy);
+  border-color: var(--gov-navy);
+  color: #ffffff;
 }
 
 .updating-text {
-  margin: 13px 0 0;
-  color: #078f69;
-  font-size: 13px;
-  font-weight: 700;
+  margin: 12px 0 0;
+  color: var(--accent-primary);
+  font-size: 12px;
+  font-family: var(--font-mono);
 }
 
 .admin-message {
-  padding: 60px 25px;
-  background: #ffffff;
-  border-radius: 20px;
+  padding: 60px 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
-.admin-message > div {
-  font-size: 45px;
+.admin-message h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 20px;
+}
+
+.admin-message p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  max-width: 480px;
 }
 
 .admin-message button {
-  padding: 12px 19px;
-  color: #ffffff;
-  background: #078f69;
+  margin-top: 12px;
+  padding: 10px 20px;
+  color: #04100c;
+  background: var(--accent-primary);
   border: 0;
-  border-radius: 10px;
-  font-weight: 800;
+  border-radius: var(--radius-md);
+  font-weight: 700;
   cursor: pointer;
+  transition: opacity 0.15s ease;
 }
+
+.admin-message button:hover {
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
 
 @media (max-width: 850px) {
   .admin-navbar {
@@ -337,7 +589,7 @@
   }
 
   .admin-hero {
-    padding: 28px 21px;
+    padding: 26px 20px;
     flex-direction: column;
     align-items: flex-start;
   }
@@ -362,139 +614,6 @@
 
   .admin-view-button {
     text-align: center;
-  }
-}
-/* =========================
-   Complaint Evidence
-========================= */
-
-.admin-evidence {
-  margin-top: 21px;
-  padding: 17px;
-  background: #f4f9f7;
-  border: 1px solid #d8e8e2;
-  border-radius: 14px;
-}
-
-.admin-evidence-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 12px;
-}
-
-.admin-evidence-heading > div {
-  display: grid;
-  gap: 3px;
-}
-
-.admin-evidence-heading > div > span {
-  color: #078f69;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 1.5px;
-}
-
-.admin-evidence-heading strong {
-  color: #173a43;
-  font-size: 16px;
-}
-
-.admin-evidence-badge {
-  padding: 6px 10px;
-  color: #08724f;
-  background: #dff4eb;
-  border-radius: 30px;
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.admin-evidence-link {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  background: #e5efeb;
-  border-radius: 11px;
-  cursor: zoom-in;
-}
-
-.admin-evidence-link img {
-  display: block;
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  transition:
-    transform 0.25s ease,
-    filter 0.25s ease;
-}
-
-.admin-evidence-link:hover img {
-  transform: scale(1.015);
-  filter: brightness(0.85);
-}
-
-.admin-evidence-overlay {
-  position: absolute;
-  right: 13px;
-  bottom: 13px;
-  padding: 8px 11px;
-  color: white;
-  background: rgb(7 31 44 / 82%);
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 800;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.admin-evidence-link:hover
-  .admin-evidence-overlay {
-  opacity: 1;
-}
-
-.admin-evidence-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 10px;
-  color: #71878b;
-  font-size: 11px;
-}
-
-.admin-evidence-meta span:first-child {
-  max-width: 75%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* 5 dashboard stats now */
-
-.admin-stats {
-  grid-template-columns:
-    repeat(5, 1fr);
-}
-
-@media (max-width: 1050px) {
-  .admin-stats {
-    grid-template-columns:
-      repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 650px) {
-  .admin-stats {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-  .admin-evidence-link img {
-    max-height: 230px;
-  }
-
-  .admin-evidence-overlay {
-    opacity: 1;
+    justify-content: center;
   }
 }

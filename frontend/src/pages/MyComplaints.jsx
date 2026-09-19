@@ -7,6 +7,7 @@ import {
   getCitizenToken,
   getCitizenUser,
 } from "../services/api";
+import Icon from "../components/Icons";
 import "./MyComplaints.css";
 
 const statusSteps = [
@@ -178,12 +179,16 @@ function MyComplaints() {
           {citizenUser && (
             <span
               style={{
-                color: "#496970",
+                color: "var(--text-secondary)",
                 fontSize: "13px",
                 fontWeight: "700",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
               }}
             >
-              👤 {citizenUser.firstName}
+              <Icon name="user" size={15} />
+              {citizenUser.firstName}
             </span>
           )}
 
@@ -244,7 +249,7 @@ function MyComplaints() {
         <section className="complaints-section">
           {loading ? (
             <div className="empty-complaints">
-              <div className="empty-icon">⏳</div>
+              <Icon name="loader" size={36} className="spin-slow" />
 
               <h2>Loading complaints...</h2>
 
@@ -255,7 +260,7 @@ function MyComplaints() {
             </div>
           ) : loadError ? (
             <div className="empty-complaints">
-              <div className="empty-icon">⚠️</div>
+              <Icon name="alert-triangle" size={36} style={{ color: "#f87171" }} />
 
               <h2>Backend connection failed</h2>
 
@@ -265,11 +270,11 @@ function MyComplaints() {
                 type="button"
                 onClick={loadComplaintsFromBackend}
                 style={{
-                  padding: "13px 21px",
-                  color: "#ffffff",
-                  background: "#079b72",
+                  padding: "11px 20px",
+                  color: "#04100c",
+                  background: "var(--accent-primary)",
                   border: "none",
-                  borderRadius: "10px",
+                  borderRadius: "8px",
                   fontWeight: "700",
                   cursor: "pointer",
                 }}
@@ -279,7 +284,7 @@ function MyComplaints() {
             </div>
           ) : complaints.length === 0 ? (
             <div className="empty-complaints">
-              <div className="empty-icon">📋</div>
+              <Icon name="file-text" size={36} />
 
               <h2>No complaints submitted yet</h2>
 
@@ -294,7 +299,7 @@ function MyComplaints() {
             </div>
           ) : filteredComplaints.length === 0 ? (
             <div className="empty-complaints">
-              <div className="empty-icon">🔍</div>
+              <Icon name="search" size={36} />
 
               <h2>No matching complaint found</h2>
 
@@ -408,9 +413,11 @@ function MyComplaints() {
                             >
                               <span>
                                 {index <
-                                currentStep
-                                  ? "✓"
-                                  : index + 1}
+                                currentStep ? (
+                                  <Icon name="check" size={13} />
+                                ) : (
+                                  index + 1
+                                )}
                               </span>
 
                               <p>{step}</p>

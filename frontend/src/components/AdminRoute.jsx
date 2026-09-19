@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  Navigate,
-  useNavigate,
-} from "react-router";
+import { Navigate, useNavigate } from "react-router";
+import Icon from "./Icons";
 import {
   adminLogout,
   clearAdminSession,
@@ -79,14 +77,30 @@ function AdminRoute({ children }) {
           minHeight: "100vh",
           display: "grid",
           placeItems: "center",
-          background: "#f3f7f5",
-          color: "#173a43",
-          fontFamily: "Arial, sans-serif",
+          background: "var(--bg-app)",
+          color: "var(--text-primary)",
         }}
       >
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "42px" }}>🔐</div>
-          <h2>Verifying admin session...</h2>
+        <div style={{ textAlign: "center", padding: "32px", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+          <div
+            style={{
+              width: "56px",
+              height: "56px",
+              borderRadius: "16px",
+              background: "var(--accent-primary-subtle)",
+              border: "1px solid var(--border-medium)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--accent-primary)",
+            }}
+          >
+            <Icon name="lock" size={26} strokeWidth={2} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: "1.25rem", margin: "0 0 4px 0", color: "var(--text-primary)" }}>Verifying Authority Session</h2>
+            <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--text-muted)" }}>Securing municipal administrative access...</p>
+          </div>
         </div>
       </div>
     );
@@ -107,18 +121,24 @@ function AdminRoute({ children }) {
           top: "18px",
           right: "24px",
           zIndex: 9999,
-          padding: "10px 15px",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
+          padding: "9px 16px",
           color: "#ffffff",
-          background: "#b53b32",
-          border: "none",
-          borderRadius: "9px",
-          fontWeight: "800",
+          background: "linear-gradient(135deg, #e11d48, #be123c)",
+          border: "1px solid rgba(255,255,255,0.2)",
+          borderRadius: "var(--radius-sm)",
+          fontWeight: "600",
+          fontSize: "0.875rem",
           cursor: loggingOut ? "not-allowed" : "pointer",
           opacity: loggingOut ? 0.7 : 1,
-          boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+          boxShadow: "0 4px 14px rgba(225, 29, 72, 0.3)",
+          transition: "all 0.2s ease",
         }}
       >
-        {loggingOut ? "Logging out..." : "Admin Logout"}
+        <Icon name="log-out" size={16} />
+        {loggingOut ? "Signing out..." : "Sign Out"}
       </button>
 
       {children}

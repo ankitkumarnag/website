@@ -426,7 +426,8 @@ function Register() {
 
               {registerError && (
                 <div className="register-error">
-                  ⚠️ {registerError}
+                  <Icon name="alert-triangle" size={16} />
+                  <span>{registerError}</span>
                 </div>
               )}
 
@@ -511,7 +512,8 @@ function Register() {
 
               {registerError && (
                 <div className="register-error">
-                  ⚠️ {registerError}
+                  <Icon name="alert-triangle" size={16} />
+                  <span>{registerError}</span>
                 </div>
               )}
 

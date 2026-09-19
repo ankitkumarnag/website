@@ -10,3 +10,6 @@ backend/users.json
 backend/complaints.json
 *.log
 .DS_Store
+*.mp4
+scratch/
+graphify-out/

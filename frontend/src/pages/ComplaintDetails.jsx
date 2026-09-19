@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { getComplaintById } from "../services/api";
+import Icon from "../components/Icons";
 import "./ComplaintDetails.css";
 
 const API_URL =
@@ -132,9 +133,9 @@ function getCheckTone(status) {
     text.includes("no strong")
   ) {
     return {
-      background: "#e8f7f0",
-      border: "#a8dcc6",
-      color: "#087153",
+      background: "rgba(16, 185, 129, 0.12)",
+      border: "rgba(16, 185, 129, 0.3)",
+      color: "#34d399",
     };
   }
 
@@ -144,9 +145,9 @@ function getCheckTone(status) {
     text.includes("reused")
   ) {
     return {
-      background: "#fff6df",
-      border: "#efd695",
-      color: "#8b6512",
+      background: "rgba(245, 158, 11, 0.12)",
+      border: "rgba(245, 158, 11, 0.3)",
+      color: "#fbbf24",
     };
   }
 
@@ -156,16 +157,16 @@ function getCheckTone(status) {
     text.includes("not configured")
   ) {
     return {
-      background: "#fff0ed",
-      border: "#efb1a8",
-      color: "#a13b2f",
+      background: "rgba(244, 63, 94, 0.12)",
+      border: "rgba(244, 63, 94, 0.3)",
+      color: "#f87171",
     };
   }
 
   return {
-    background: "#eef5f3",
-    border: "#cfdfda",
-    color: "#49665f",
+    background: "rgba(255, 255, 255, 0.05)",
+    border: "rgba(255, 255, 255, 0.12)",
+    color: "#94a3b8",
   };
 }
 
@@ -181,15 +182,15 @@ function StatusPill({
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "7px",
-        padding: "7px 11px",
-        background:
-          tone.background,
+        gap: "6px",
+        padding: "5px 11px",
+        background: tone.background,
         border: `1px solid ${tone.border}`,
         borderRadius: "999px",
         color: tone.color,
         fontSize: "12px",
-        fontWeight: "900",
+        fontWeight: "700",
+        fontFamily: "var(--font-mono)",
         lineHeight: 1,
       }}
     >
@@ -208,42 +209,41 @@ function StatusPill({
 const intelligenceStyles = {
   section: {
     marginTop: "24px",
-    padding: "22px",
-    background:
-      "linear-gradient(180deg, #f8fbfa 0%, #f1f7f4 100%)",
-    border:
-      "1px solid #d5e5df",
+    padding: "24px",
+    background: "rgba(255, 255, 255, 0.02)",
+    border: "1px solid var(--border-subtle)",
     borderRadius: "18px",
   },
 
   header: {
     display: "flex",
-    justifyContent:
-      "space-between",
+    justifyContent: "space-between",
     alignItems: "flex-start",
     gap: "14px",
-    marginBottom: "16px",
+    marginBottom: "18px",
   },
 
   eyebrow: {
     display: "block",
     marginBottom: "5px",
-    color: "#0a8b67",
-    fontSize: "10px",
-    fontWeight: "900",
+    color: "var(--accent-primary)",
+    fontFamily: "var(--font-mono)",
+    fontSize: "11px",
+    fontWeight: "700",
     letterSpacing: "1.4px",
   },
 
   title: {
     margin: 0,
-    color: "#173b42",
-    fontSize: "21px",
+    color: "var(--text-primary)",
+    fontFamily: "var(--font-heading)",
+    fontSize: "20px",
+    fontWeight: "700",
   },
 
   subtitle: {
-    margin:
-      "6px 0 0",
-    color: "#6c807a",
+    margin: "6px 0 0",
+    color: "var(--text-secondary)",
     fontSize: "13px",
     lineHeight: 1.55,
   },
@@ -258,64 +258,68 @@ const intelligenceStyles = {
   card: {
     minWidth: 0,
     padding: "16px",
-    background: "#ffffff",
-    border:
-      "1px solid #dce8e3",
+    background: "rgba(255, 255, 255, 0.03)",
+    border: "1px solid var(--border-subtle)",
     borderRadius: "14px",
   },
 
   cardLabel: {
     display: "block",
-    marginBottom: "9px",
-    color: "#718984",
+    marginBottom: "8px",
+    color: "var(--text-tertiary)",
     fontSize: "10px",
-    fontWeight: "900",
+    fontWeight: "700",
     letterSpacing: "1px",
+    textTransform: "uppercase",
   },
 
   meta: {
     marginTop: "10px",
-    color: "#60756f",
+    color: "var(--text-secondary)",
     fontSize: "12px",
     lineHeight: 1.55,
   },
 
   summary: {
-    margin:
-      "12px 0 0",
-    color: "#334d52",
+    margin: "12px 0 0",
+    color: "var(--text-secondary)",
     fontSize: "13px",
     lineHeight: 1.6,
   },
 
   list: {
-    margin:
-      "10px 0 0",
-    paddingLeft: "18px",
-    color: "#445d59",
+    margin: "10px 0 0",
+    paddingLeft: "0",
+    listStyle: "none",
+    color: "var(--text-secondary)",
     fontSize: "12px",
     lineHeight: 1.65,
+    display: "grid",
+    gap: "5px",
   },
 
   warning: {
     marginTop: "12px",
-    padding:
-      "10px 12px",
-    background: "#fff1ed",
-    border:
-      "1px solid #f1bbb1",
+    padding: "8px 12px",
+    background: "rgba(244, 63, 94, 0.1)",
+    border: "1px solid rgba(244, 63, 94, 0.25)",
     borderRadius: "10px",
-    color: "#9a3c31",
+    color: "#f87171",
     fontSize: "12px",
-    fontWeight: "800",
+    fontWeight: "600",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
   },
 
   link: {
-    display: "inline-block",
-    marginTop: "8px",
-    color: "#087b5d",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "4px",
+    marginTop: "10px",
+    color: "var(--accent-primary)",
     fontSize: "12px",
-    fontWeight: "800",
+    fontWeight: "700",
     textDecoration: "none",
   },
 };
@@ -447,7 +451,7 @@ function ComplaintDetails() {
     return (
       <div className="details-page">
         <main className="complaint-not-found">
-          <span>⏳</span>
+          <Icon name="loader" size={36} className="spin-slow" />
 
           <h1>
             Loading complaint...
@@ -466,7 +470,7 @@ function ComplaintDetails() {
     return (
       <div className="details-page">
         <main className="complaint-not-found">
-          <span>🔍</span>
+          <Icon name="search" size={36} />
 
           <h1>
             Complaint not found
@@ -601,7 +605,7 @@ function ComplaintDetails() {
                   </div>
 
                   <span className="evidence-attached-badge">
-                    ✓ Evidence attached
+                    <Icon name="check" size={13} /> Evidence attached
                   </span>
                 </div>
 
@@ -620,14 +624,14 @@ function ComplaintDetails() {
                   />
 
                   <div className="evidence-open-overlay">
-                    🔍 Open full-size
+                    <Icon name="search" size={13} /> Open full-size
                   </div>
                 </a>
 
                 <div className="evidence-meta">
                   {complaint.evidenceOriginalName && (
-                    <span>
-                      📎{" "}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                      <Icon name="paperclip" size={13} />
                       {
                         complaint.evidenceOriginalName
                       }
@@ -774,8 +778,9 @@ function ComplaintDetails() {
                                 key={
                                   factor
                                 }
+                                style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
                               >
-                                ✓{" "}
+                                <Icon name="check" size={12} style={{ color: "var(--accent-primary)" }} />
                                 {factor}
                               </li>
                             )
@@ -789,7 +794,7 @@ function ComplaintDetails() {
                           intelligenceStyles.warning
                         }
                       >
-                        ⚠ Manual admin review recommended.
+                        <Icon name="alert-triangle" size={13} /> Manual admin review recommended.
                       </div>
                     )}
 
@@ -932,7 +937,7 @@ function ComplaintDetails() {
                           intelligenceStyles.warning
                         }
                       >
-                        ⚠ The exact same evidence file has
+                        <Icon name="alert-triangle" size={13} /> The exact same evidence file has
                         appeared in an earlier complaint.
                       </div>
                     )}
@@ -1129,9 +1134,11 @@ function ComplaintDetails() {
                   >
                     <span>
                       {index <
-                      currentStep
-                        ? "✓"
-                        : index + 1}
+                      currentStep ? (
+                        <Icon name="check" size={13} />
+                      ) : (
+                        index + 1
+                      )}
                     </span>
 
                     <div>

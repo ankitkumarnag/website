@@ -189,7 +189,8 @@ function Login() {
 
             {loginError && (
               <div className="register-error">
-                ⚠️ {loginError}
+                <Icon name="alert-triangle" size={16} />
+                <span>{loginError}</span>
               </div>
             )}
 

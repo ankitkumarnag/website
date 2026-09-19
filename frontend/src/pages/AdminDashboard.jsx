@@ -11,6 +11,7 @@ import {
   updateComplaintStatus,
   updateEvidenceReview,
 } from "../services/api";
+import Icon from "../components/Icons";
 
 import "./AdminDashboard.css";
 
@@ -87,9 +88,9 @@ function getCheckTone(status) {
     text.includes("no strong")
   ) {
     return {
-      background: "#e8f7f0",
-      border: "#a8dcc6",
-      color: "#087153",
+      background: "rgba(16, 185, 129, 0.12)",
+      border: "rgba(16, 185, 129, 0.3)",
+      color: "#34d399",
     };
   }
 
@@ -99,9 +100,9 @@ function getCheckTone(status) {
     text.includes("reused")
   ) {
     return {
-      background: "#fff6df",
-      border: "#efd695",
-      color: "#8b6512",
+      background: "rgba(245, 158, 11, 0.12)",
+      border: "rgba(245, 158, 11, 0.3)",
+      color: "#fbbf24",
     };
   }
 
@@ -111,16 +112,16 @@ function getCheckTone(status) {
     text.includes("not configured")
   ) {
     return {
-      background: "#fff0ed",
-      border: "#efb1a8",
-      color: "#a13b2f",
+      background: "rgba(244, 63, 94, 0.12)",
+      border: "rgba(244, 63, 94, 0.3)",
+      color: "#f87171",
     };
   }
 
   return {
-    background: "#eef5f3",
-    border: "#cfdfda",
-    color: "#49665f",
+    background: "rgba(255, 255, 255, 0.05)",
+    border: "rgba(255, 255, 255, 0.12)",
+    color: "#94a3b8",
   };
 }
 
@@ -137,14 +138,14 @@ function AdminCheckBadge({
         display: "inline-flex",
         alignItems: "center",
         gap: "6px",
-        padding: "6px 9px",
-        background:
-          tone.background,
+        padding: "5px 10px",
+        background: tone.background,
         border: `1px solid ${tone.border}`,
         borderRadius: "999px",
         color: tone.color,
         fontSize: "11px",
-        fontWeight: "900",
+        fontWeight: "700",
+        fontFamily: "var(--font-mono)",
         lineHeight: 1,
       }}
     >
@@ -163,101 +164,102 @@ function AdminCheckBadge({
 const adminAiStyles = {
   wrapper: {
     marginTop: "16px",
-    padding: "16px",
-    background: "#f6faf8",
-    border:
-      "1px solid #d6e5df",
+    padding: "18px",
+    background: "rgba(255, 255, 255, 0.02)",
+    border: "1px solid var(--border-subtle)",
     borderRadius: "14px",
   },
 
   heading: {
     display: "flex",
     alignItems: "center",
-    justifyContent:
-      "space-between",
+    justifyContent: "space-between",
     gap: "10px",
-    marginBottom: "12px",
+    marginBottom: "14px",
   },
 
   label: {
     margin: 0,
-    color: "#0b8161",
-    fontSize: "10px",
-    fontWeight: "900",
+    color: "var(--accent-primary)",
+    fontSize: "11px",
+    fontWeight: "800",
     letterSpacing: "1.2px",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
   },
 
   grid: {
     display: "grid",
     gridTemplateColumns:
-      "repeat(auto-fit, minmax(190px, 1fr))",
-    gap: "9px",
+      "repeat(auto-fit, minmax(200px, 1fr))",
+    gap: "10px",
   },
 
   card: {
     minWidth: 0,
-    padding: "12px",
-    background: "#ffffff",
-    border:
-      "1px solid #dfe9e5",
-    borderRadius: "11px",
+    padding: "14px",
+    background: "rgba(255, 255, 255, 0.03)",
+    border: "1px solid var(--border-subtle)",
+    borderRadius: "10px",
   },
 
   title: {
     display: "block",
     marginBottom: "8px",
-    color: "#617973",
-    fontSize: "9px",
-    fontWeight: "900",
+    color: "var(--text-tertiary)",
+    fontSize: "10px",
+    fontWeight: "800",
     letterSpacing: ".8px",
+    textTransform: "uppercase",
   },
 
   meta: {
-    margin:
-      "9px 0 0",
-    color: "#5d716c",
-    fontSize: "11px",
+    margin: "10px 0 0",
+    color: "var(--text-secondary)",
+    fontSize: "12px",
     lineHeight: 1.5,
   },
 
   summary: {
-    margin:
-      "9px 0 0",
-    color: "#374f54",
-    fontSize: "11px",
+    margin: "10px 0 0",
+    color: "var(--text-secondary)",
+    fontSize: "12px",
     lineHeight: 1.55,
   },
 
   warning: {
-    marginTop: "9px",
-    padding:
-      "8px 9px",
-    background: "#fff0ed",
-    border:
-      "1px solid #f0b9af",
+    marginTop: "10px",
+    padding: "8px 10px",
+    background: "rgba(244, 63, 94, 0.1)",
+    border: "1px solid rgba(244, 63, 94, 0.25)",
     borderRadius: "8px",
-    color: "#9c3c30",
-    fontSize: "10px",
-    fontWeight: "800",
+    color: "#f87171",
+    fontSize: "11px",
+    fontWeight: "700",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
   },
 
   link: {
-    display: "inline-block",
-    marginTop: "8px",
-    color: "#087b5d",
-    fontSize: "11px",
-    fontWeight: "800",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "4px",
+    marginTop: "10px",
+    color: "var(--accent-primary)",
+    fontSize: "12px",
+    fontWeight: "700",
     textDecoration: "none",
   },
 };
 
-
 const adminReviewStyles = {
   wrapper: {
-    marginTop: "14px",
-    padding: "16px",
-    background: "#fffdf8",
-    border: "1px solid #eadfbe",
+    marginTop: "16px",
+    padding: "18px",
+    background: "rgba(16, 185, 129, 0.03)",
+    border: "1px solid rgba(16, 185, 129, 0.2)",
     borderRadius: "14px",
   },
 
@@ -271,24 +273,27 @@ const adminReviewStyles = {
 
   label: {
     margin: 0,
-    color: "#6e5a18",
-    fontSize: "10px",
-    fontWeight: "900",
+    color: "var(--accent-primary)",
+    fontSize: "11px",
+    fontWeight: "800",
     letterSpacing: "1.1px",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
   },
 
   note: {
     width: "100%",
     minHeight: "72px",
     marginTop: "12px",
-    padding: "10px 12px",
+    padding: "10px 14px",
     resize: "vertical",
-    color: "#32484d",
-    background: "#ffffff",
-    border: "1px solid #d9d4c2",
+    color: "var(--text-primary)",
+    background: "rgba(0, 0, 0, 0.25)",
+    border: "1px solid var(--border-subtle)",
     borderRadius: "9px",
     fontFamily: "inherit",
-    fontSize: "12px",
+    fontSize: "13px",
     lineHeight: 1.5,
     boxSizing: "border-box",
   },
@@ -297,23 +302,27 @@ const adminReviewStyles = {
     display: "flex",
     flexWrap: "wrap",
     gap: "8px",
-    marginTop: "10px",
+    marginTop: "12px",
   },
 
   button: {
     minHeight: "38px",
-    padding: "9px 12px",
+    padding: "8px 14px",
     border: "0",
-    borderRadius: "9px",
-    fontSize: "11px",
-    fontWeight: "900",
+    borderRadius: "8px",
+    fontSize: "12px",
+    fontWeight: "700",
     cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "6px",
+    transition: "all 0.15s ease",
   },
 
   meta: {
-    margin: "9px 0 0",
-    color: "#6c6b61",
-    fontSize: "11px",
+    margin: "10px 0 0",
+    color: "var(--text-tertiary)",
+    fontSize: "12px",
     lineHeight: 1.5,
   },
 };
@@ -631,7 +640,8 @@ function AdminDashboard() {
             className="refresh-button"
             onClick={loadComplaints}
           >
-            ↻ Refresh Data
+            <Icon name="refresh" size={15} />
+            Refresh Telemetry
           </button>
         </section>
 
@@ -746,7 +756,7 @@ function AdminDashboard() {
 
         {loading ? (
           <section className="admin-message">
-            <div>⏳</div>
+            <Icon name="loader" size={36} className="spin-slow" />
 
             <h2>
               Loading complaints...
@@ -754,7 +764,7 @@ function AdminDashboard() {
           </section>
         ) : error ? (
           <section className="admin-message">
-            <div>⚠️</div>
+            <Icon name="alert-triangle" size={36} style={{ color: "#f87171" }} />
 
             <h2>
               Backend connection failed
@@ -772,7 +782,7 @@ function AdminDashboard() {
         ) : filteredComplaints.length ===
           0 ? (
           <section className="admin-message">
-            <div>📋</div>
+            <Icon name="file-text" size={36} />
 
             <h2>
               No complaints found
@@ -876,7 +886,7 @@ function AdminDashboard() {
                           </div>
 
                           <span className="admin-evidence-badge">
-                            ✓ Attached
+                            <Icon name="check" size={13} /> Attached
                           </span>
                         </div>
 
@@ -898,15 +908,14 @@ function AdminDashboard() {
                           />
 
                           <div className="admin-evidence-overlay">
-                            🔍 Open
-                            full-size
+                            <Icon name="search" size={13} /> Open full-size
                           </div>
                         </a>
 
                         <div className="admin-evidence-meta">
                           {complaint.evidenceOriginalName && (
-                            <span>
-                              📎{" "}
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                              <Icon name="paperclip" size={13} />
                               {
                                 complaint.evidenceOriginalName
                               }
@@ -950,7 +959,7 @@ function AdminDashboard() {
                                 adminAiStyles.warning
                               }
                             >
-                              ⚠ Manual review
+                              <Icon name="alert-triangle" size={12} /> Manual review
                             </span>
                           )}
                         </div>
@@ -1241,7 +1250,7 @@ function AdminDashboard() {
                                   : 1,
                             }}
                           >
-                            ✓ Approve Evidence
+                            <Icon name="check" size={14} /> Approve Evidence
                           </button>
 
                           <button
@@ -1258,8 +1267,9 @@ function AdminDashboard() {
                             }
                             style={{
                               ...adminReviewStyles.button,
-                              color: "#6f5411",
-                              background: "#f8e8af",
+                              color: "#fbbf24",
+                              background: "rgba(245, 158, 11, 0.15)",
+                              border: "1px solid rgba(245, 158, 11, 0.3)",
                               opacity:
                                 reviewingId ===
                                 complaint.id
@@ -1267,7 +1277,7 @@ function AdminDashboard() {
                                   : 1,
                             }}
                           >
-                            ◷ Needs Review
+                            <Icon name="clock" size={14} /> Needs Review
                           </button>
 
                           <button
@@ -1285,7 +1295,7 @@ function AdminDashboard() {
                             style={{
                               ...adminReviewStyles.button,
                               color: "#ffffff",
-                              background: "#b3473a",
+                              background: "#e11d48",
                               opacity:
                                 reviewingId ===
                                 complaint.id
@@ -1293,7 +1303,7 @@ function AdminDashboard() {
                                   : 1,
                             }}
                           >
-                            ⚠ Mark Suspicious
+                            <Icon name="alert-triangle" size={14} /> Mark Suspicious
                           </button>
 
                           <button
@@ -1310,8 +1320,9 @@ function AdminDashboard() {
                             }
                             style={{
                               ...adminReviewStyles.button,
-                              color: "#3d565c",
-                              background: "#e9f0ed",
+                              color: "var(--text-secondary)",
+                              background: "rgba(255, 255, 255, 0.05)",
+                              border: "1px solid var(--border-subtle)",
                               opacity:
                                 reviewingId ===
                                 complaint.id
@@ -1319,7 +1330,7 @@ function AdminDashboard() {
                                   : 1,
                             }}
                           >
-                            ↺ Reset Review
+                            <Icon name="refresh" size={14} /> Reset Review
                           </button>
                         </div>
 
