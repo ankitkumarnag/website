@@ -10,6 +10,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import Icon from "../components/Icons";
 import VoiceInput from "../components/VoiceInput";
+import FaceIDScan from "../components/ui/amicro/FaceIDScan";
 import {
   clearCitizenSession,
   getCitizenToken,
@@ -27,6 +28,51 @@ const categories = [
   { value: "Fire and Emergency", label: "Fire & Structural Emergency", icon: "flame" },
   { value: "Other Public Issue", label: "General Municipal Concern", icon: "building" },
 ];
+
+const CATEGORY_KEYWORDS = {
+  "Road and Pothole": [
+    "pothole", "potholes", "road", "roads", "asphalt", "tar", "footpath", "sidewalk", "street",
+    "crack", "cracks", "bridge", "flyover", "highway", "speedbreaker", "tarmac", "pavement",
+    "gadda", "gaddhe", "gaddha", "sadak", "sadako", "khadda", "khadde", "rasta", "raasta", "paver",
+    "गड्ढा", "सड़क", "रास्ता", "फुटपाथ", "फ्लाईओवर", "गड्ढे", "खड्डा",
+    "khala", "rasta", "gada", "gata", "ଖାଲ", "ରାସ୍ତା", "ଗାଡା", "ଗାତ", "ପୋଲ"
+  ],
+  "Sanitation and Waste": [
+    "garbage", "trash", "waste", "dustbin", "litter", "dump", "stench", "stink", "smell", "sweeping",
+    "cleanliness", "sanitation", "filth", "sludge", "bin",
+    "kachra", "kachada", "gandagi", "baddboo", "badbu", "dustbin", "safai", "safayi",
+    "कचरा", "गंदगी", "बदबू", "डस्टबिन", "सफाई", "कचड़े",
+    "abarjana", "maila", "kachara", "safai", "ଅବର୍ଜନା", "ମଇଳା", "ସଫାଇ", "କଚରା"
+  ],
+  "Electricity": [
+    "electricity", "transformer", "power", "spark", "sparking", "wire", "cable", "pole", "streetlight",
+    "light", "darkness", "blackout", "current", "shock", "voltage", "feeder", "grid",
+    "bijli", "bijlee", "tarmac", "taar", "tar", "pole", "khamba", "khambha", "spark", "light",
+    "बिजली", "ट्रांसफार्मर", "तार", "खंभा", "स्ट्रीटलाइट", "करंट", "चिंगारी",
+    "bijuli", "khunta", "tara", "light", "ବିଜୁଳି", "ଖୁଣ୍ଟ", "ତାର", "ଲାଇଟ୍", "କରଣ୍ଟ"
+  ],
+  "Public Healthcare": [
+    "hospital", "doctor", "health", "healthcare", "clinic", "dispensary", "disease", "fever",
+    "dengue", "malaria", "mosquito", "fogging", "contamination", "epidemic", "patient", "ambulance",
+    "aspatal", "hospital", "bimar", "bimari", "machhar", "machharon", "dengue", "dawa", "ilaj",
+    "अस्पताल", "बीमारी", "मच्छर", "डेंगू", "स्वास्थ्य", "डॉक्टर", "दवा",
+    "daktarkhana", "swasthya", "mosa", "dengue", "ଡାକ୍ତରଖାନା", "ସ୍ୱାସ୍ଥ୍ୟ", "ମଶା", "ଡେଙ୍ଗୁ", "ରୋଗ"
+  ],
+  "Water Supply": [
+    "water", "drainage", "sewerage", "sewer", "pipe", "pipeline", "leak", "leakage", "overflow",
+    "contamination", "dirty water", "drinking water", "tanker", "sump", "manhole", "gutter",
+    "paani", "pani", "nami", "nal", "nala", "nali", "gutter", "gandapani", "pipe",
+    "पानी", "नल", "नाला", "नाली", "सीवर", "लीकेज", "गंदा पानी",
+    "pani", "nala", "nali", "sewer", "pipe", "ପାଣି", "ନାଳ", "ନଳ", "ସିୱେର"
+  ],
+  "Fire and Emergency": [
+    "fire", "smoke", "flame", "blast", "explosion", "cylinder", "building collapse", "emergency",
+    "rescue", "burning", "hazmat", "chemical leak",
+    "aag", "dhua", "dhuwa", "blast", "cylinder", "jalna", "aag lagi",
+    "आग", "धुआं", "ब्लास्ट", "सिलेंडर", "जल रहा", "इमर्जेंसी",
+    "nia", "dhuan", "blast", "cylinder", "ନିଆଁ", "ଧୂଆଁ", "ବିସ୍ଫୋରଣ"
+  ]
+};
 
 function RecenterLocationMap({ latitude, longitude }) {
   const map = useMap();
@@ -88,11 +134,14 @@ function ReportComplaint() {
   const citizenToken = getCitizenToken();
   const citizenUser = getCitizenUser();
 
+  const [title, setTitle] = useState("");
   const [preview, setPreview] = useState("");
   const [evidenceFile, setEvidenceFile] = useState(null);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Road and Pothole");
+  const [isManuallySelectedCategory, setIsManuallySelectedCategory] = useState(false);
+  const [autoDetectedCategory, setAutoDetectedCategory] = useState("");
   const [locationStatus, setLocationStatus] = useState("");
   const [complaintId, setComplaintId] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -113,6 +162,65 @@ function ReportComplaint() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  function autoDetectCategory(text, isManualOverride = false) {
+    if (isManualOverride) {
+      setIsManuallySelectedCategory(true);
+      setAutoDetectedCategory("");
+      return;
+    }
+
+    if (isManuallySelectedCategory) {
+      return;
+    }
+
+    const lowerText = (text || "").toLowerCase();
+    let bestCategory = null;
+    let maxScore = 0;
+
+    Object.entries(CATEGORY_KEYWORDS).forEach(([catValue, keywords]) => {
+      let score = 0;
+      keywords.forEach((keyword) => {
+        if (lowerText.includes(keyword.toLowerCase())) {
+          score += 1;
+        }
+      });
+
+      if (score > maxScore) {
+        maxScore = score;
+        bestCategory = catValue;
+      }
+    });
+
+    if (bestCategory && maxScore > 0) {
+      setSelectedCategory(bestCategory);
+      setAutoDetectedCategory(bestCategory);
+    }
+  }
+
+  function handleTitleChange(event) {
+    const val = event.target.value;
+    setTitle(val);
+    autoDetectCategory(`${val} ${description}`);
+  }
+
+  function handleDescriptionChange(event) {
+    const val = event.target.value;
+    setDescription(val);
+    autoDetectCategory(`${title} ${val}`);
+  }
+
+  function handleTitleVoiceTranscript(spokenText) {
+    const newTitle = title.trim() ? `${title.trim()} ${spokenText}` : spokenText;
+    setTitle(newTitle);
+    autoDetectCategory(`${newTitle} ${description}`);
+  }
+
+  function handleVoiceTranscript(spokenText) {
+    const newDesc = description.trim() ? `${description.trim()} ${spokenText}` : spokenText;
+    setDescription(newDesc);
+    autoDetectCategory(`${title} ${newDesc}`);
+  }
 
   function handleImageChange(event) {
     const file = event.target.files[0];
@@ -149,15 +257,6 @@ function ReportComplaint() {
     }
 
     setPreview(URL.createObjectURL(file));
-  }
-
-  function handleVoiceTranscript(spokenText) {
-    setDescription((currentDescription) => {
-      if (!currentDescription.trim()) {
-        return spokenText;
-      }
-      return `${currentDescription.trim()} ${spokenText}`;
-    });
   }
 
   function stopLiveLocation(
@@ -498,33 +597,67 @@ function ReportComplaint() {
           </div>
 
           <form onSubmit={handleSubmit} className="intake-form">
-            {/* Title */}
+            {/* Title with Voice Dictation */}
             <div className="input-group">
-              <label htmlFor="complaint-title">
-                Incident Title *
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="complaint-title" className="font-semibold text-sm text-[#F8FAFC]">
+                  Incident Title *
+                </label>
+                <span className="text-xs text-[#EA580C] font-semibold flex items-center gap-1">
+                  <Icon name="sparkles" size={13} />
+                  Multilingual Voice & AI Classification Active
+                </span>
+              </div>
+
+              <VoiceInput 
+                onTranscript={handleTitleVoiceTranscript} 
+                buttonText="Voice Dictate Title"
+                labelHelper="Dictate in हिन्दी, English, or ଓଡ଼ିଆ. Spoken text is transcribed in your exact language & AI auto-selects category!"
+              />
+
               <input
                 id="complaint-title"
                 type="text"
                 name="title"
+                value={title}
+                onChange={handleTitleChange}
                 placeholder="e.g. Hazardous electrical transformer sparking near hospital gate"
                 required
-                className="form-input"
+                className="form-input mt-2"
               />
             </div>
 
-            {/* Category Grid */}
+            {/* Category Grid with AI Auto-Selection */}
             <div className="input-group">
-              <label>Municipal Category *</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="font-semibold text-sm text-[#F8FAFC]">Municipal Category *</label>
+                {autoDetectedCategory && !isManuallySelectedCategory && (
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#EA580C]/20 text-[#EA580C] border border-[#EA580C]/40 flex items-center gap-1.5 animate-pulse">
+                    <Icon name="sparkles" size={13} />
+                    Auto-Selected by AI: {categories.find(c => c.value === autoDetectedCategory)?.label}
+                  </span>
+                )}
+                {isManuallySelectedCategory && (
+                  <span className="text-[11px] text-[#94A3B8] font-mono">
+                    (User Manual Override)
+                  </span>
+                )}
+              </div>
+
               <div className="category-selection-grid">
                 {categories.map((cat) => {
                   const isSelected = selectedCategory === cat.value;
+                  const isAuto = autoDetectedCategory === cat.value && !isManuallySelectedCategory;
                   return (
                     <button
                       type="button"
                       key={cat.value}
-                      className={`category-tile ${isSelected ? "selected" : ""}`}
-                      onClick={() => setSelectedCategory(cat.value)}
+                      className={`category-tile ${isSelected ? "selected" : ""} ${isAuto ? "border-2 border-[#EA580C] shadow-[0_0_12px_rgba(234,88,12,0.3)]" : ""}`}
+                      onClick={() => {
+                        setSelectedCategory(cat.value);
+                        setIsManuallySelectedCategory(true);
+                        setAutoDetectedCategory("");
+                      }}
                     >
                       <div className="tile-icon-box">
                         <Icon name={cat.icon} size={18} />
@@ -539,21 +672,25 @@ function ReportComplaint() {
 
             {/* Description & Voice Input */}
             <div className="input-group">
-              <label htmlFor="complaint-description">
+              <label htmlFor="complaint-description" className="font-semibold text-sm text-[#F8FAFC]">
                 Incident Description & Context *
               </label>
 
-              <VoiceInput onTranscript={handleVoiceTranscript} />
+              <VoiceInput 
+                onTranscript={handleVoiceTranscript} 
+                buttonText="Voice Dictate Description"
+                labelHelper="Detail the civic condition or speak in Hindi/English/Odia to append text."
+              />
 
               <textarea
                 id="complaint-description"
                 name="description"
-                rows="5"
+                rows="4"
                 value={description}
-                onChange={(event) => setDescription(event.target.value)}
+                onChange={handleDescriptionChange}
                 placeholder="Detail the civic condition, immediate risks, and landmarks. You may use speech-to-text above..."
                 required
-                className="form-textarea"
+                className="form-textarea mt-2"
               />
             </div>
 
@@ -570,9 +707,18 @@ function ReportComplaint() {
                 />
 
                 {preview ? (
-                  <div className="evidence-preview-wrapper">
+                  <div className="evidence-preview-wrapper relative">
                     <img src={preview} alt="Evidence preview" className="evidence-img" />
-                    <div className="evidence-overlay">
+                    
+                    {/* Amicro AI Scan Overlay */}
+                    <div className="absolute inset-0 bg-[#0B192C]/70 backdrop-blur-xs flex items-center justify-center p-2 rounded-xl">
+                      <FaceIDScan 
+                        label="Gemini Vision Audit" 
+                        subtitle="Multimodal pothole & hazard verification active" 
+                      />
+                    </div>
+
+                    <div className="evidence-overlay z-20">
                       <label htmlFor="evidence-input" className="replace-btn">
                         <Icon name="camera" size={15} />
                         <span>Change Photo</span>

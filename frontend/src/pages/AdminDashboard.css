@@ -185,9 +185,9 @@
    ========================================================================== */
 
 .admin-tools {
-  margin: 28px 0 24px;
+  margin: 28px 0 14px;
   display: grid;
-  grid-template-columns: 1fr 220px;
+  grid-template-columns: 1fr 240px 200px;
   gap: 14px;
 }
 
@@ -214,6 +214,74 @@
 .admin-tools select option {
   background: #ffffff;
   color: #0f172a;
+}
+
+/* Category Filter Badges / Quick Tabs */
+.admin-category-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 2px 0;
+}
+
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-full);
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cat-pill:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.cat-pill.active {
+  background: #0f2942;
+  border-color: var(--gov-saffron);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 41, 66, 0.2);
+}
+
+.cat-pill.active svg {
+  color: var(--gov-saffron);
+}
+
+.cat-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(217, 83, 30, 0.15);
+  color: #d9531e;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.cat-pill.active .cat-count-badge {
+  background: var(--gov-saffron);
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .admin-tools {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ==========================================================================

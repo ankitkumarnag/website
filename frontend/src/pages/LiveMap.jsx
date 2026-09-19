@@ -13,6 +13,7 @@ import "leaflet/dist/leaflet.css";
 
 import { getAllComplaints } from "../services/api";
 import Icon from "../components/Icons";
+import RadarSweep from "../components/ui/amicro/RadarSweep";
 
 import "./LiveMap.css";
 
@@ -227,13 +228,17 @@ function LiveMap() {
 
   return (
     <div className="live-map-page">
-      <header className="live-map-navbar">
-        <Link
-          to="/"
-          className="live-map-logo"
-        >
-          NagarSwar <span>AI</span>
-        </Link>
+      <header className="live-map-navbar flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="live-map-logo"
+          >
+            NagarSwar <span>AI</span>
+          </Link>
+
+          <RadarSweep size="sm" label="GIS Radar Active" />
+        </div>
 
         <Link
           to="/"

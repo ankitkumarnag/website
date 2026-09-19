@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { getComplaintById } from "../services/api";
 import Icon from "../components/Icons";
+import CardTimeMachine from "../components/ui/amicro/CardTimeMachine";
 import "./ComplaintDetails.css";
 
 const API_URL =
@@ -1104,6 +1105,11 @@ function ComplaintDetails() {
                     </strong>
                   </div>
                 )}
+            </div>
+
+            {/* Amicro 3D Grievance Lifecycle Time Machine Scrubber */}
+            <div className="mt-6 mb-2">
+              <CardTimeMachine />
             </div>
           </section>
 

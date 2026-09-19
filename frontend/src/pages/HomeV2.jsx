@@ -4,7 +4,12 @@ import nagarSwarLogo from "../assets/nagarswar-logo.png";
 import cityPulseImage from "../assets/city-pulse-illustration.png";
 import potholeImg from "../assets/pothole-before.webp";
 import Icon from "../components/Icons";
+import BlurText from "../components/ui/amicro/BlurText";
+import MagneticButton from "../components/ui/amicro/MagneticButton";
+import CitizenProfileModal from "../components/CitizenProfileModal";
+import { getCitizenUser, getCitizenToken, getAdminToken, clearCitizenSession, clearAdminSession } from "../services/api";
 import "./HomeV2.css";
+
 
 const translations = {
   en: {
@@ -314,10 +319,25 @@ function HomeV2() {
   const [latestComplaint, setLatestComplaint] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showNavMenu, setShowNavMenu] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [activeMobileStep, setActiveMobileStep] = useState(2); // 0: Logged, 1: Audited, 2: Dispatched, 3: Resolved
+
+  const citizenUser = getCitizenUser();
+  const citizenToken = getCitizenToken();
+  const adminToken = getAdminToken();
+  const isLoggedIn = Boolean(citizenToken || adminToken || citizenUser);
+
+  const handleLogout = () => {
+    clearCitizenSession();
+    clearAdminSession();
+    setShowProfileModal(false);
+    setShowNavMenu(false);
+    window.location.reload();
+  };
 
   const text = translations[language];
   const alerts = alertData[language];
+
 
   useEffect(() => {
     fetch("http://localhost:5000/api/complaints")
@@ -593,6 +613,40 @@ function HomeV2() {
                     <Icon name="shield" size={16} />
                     <span>Admin Dashboard</span>
                   </Link>
+
+                  {/* Citizen Profile & Grievance Stats Option */}
+                  <button
+                    type="button"
+                    className="nav-dropdown-item"
+                    onClick={() => {
+                      setShowNavMenu(false);
+                      setShowProfileModal(true);
+                    }}
+                  >
+                    <Icon name="user" size={16} />
+                    <span>Citizen Profile & Stats</span>
+                  </button>
+
+                  {/* Dynamic Log Out / Log In Option */}
+                  {isLoggedIn ? (
+                    <button
+                      type="button"
+                      className="nav-dropdown-item nav-logout-item"
+                      onClick={handleLogout}
+                    >
+                      <Icon name="log-out" size={16} />
+                      <span>Log Out</span>
+                    </button>
+                  ) : (
+                    <Link
+                      to="/login"
+                      className="nav-dropdown-item nav-login-item"
+                      onClick={() => setShowNavMenu(false)}
+                    >
+                      <Icon name="log-in" size={16} />
+                      <span>Log In</span>
+                    </Link>
+                  )}
                 </div>
               )}
 
@@ -647,6 +701,24 @@ function HomeV2() {
                 <Icon name="coin" size={16} />
                 <span>{coins}</span>
               </button>
+
+              {/* User Profile / Auth Control Button */}
+              {isLoggedIn ? (
+                <button
+                  type="button"
+                  className="pill-user-profile-btn"
+                  onClick={() => setShowProfileModal(true)}
+                  title="View Citizen Profile & Complaint Stats"
+                >
+                  <Icon name="user" size={15} />
+                  <span>{citizenUser?.firstName || "Profile"}</span>
+                </button>
+              ) : (
+                <Link to="/login" className="pill-auth-btn" title="Sign In to NagarSwar AI">
+                  <Icon name="log-in" size={15} />
+                  <span>Log In</span>
+                </Link>
+              )}
 
               {/* Notification Bell */}
               <div className="nav-notif-wrapper">
@@ -717,29 +789,34 @@ function HomeV2() {
             </div>
           </header>
 
+
           {/* ================= HERO CONTENT ================= */}
           <div className="reference-hero-content">
-            {/* Bold Stacked 3-Line Display Headline */}
+            {/* Bold Stacked 3-Line Display Headline with Amicro BlurText */}
             <h1 className="hero-stacked-headline">
-              <span className="headline-line">{text.heroOne}</span>
-              <span className="headline-line">{text.heroTwo}</span>
-              <span className="headline-line headline-accent">{text.heroThree}</span>
+              <span className="headline-line"><BlurText text={text.heroOne} duration={0.6} /></span>
+              <span className="headline-line"><BlurText text={text.heroTwo} duration={0.7} /></span>
+              <span className="headline-line headline-accent"><BlurText text={text.heroThree} duration={0.8} /></span>
             </h1>
 
             {/* Editorial Description */}
             <p className="hero-editorial-subtitle">{text.description}</p>
 
-            {/* Dual CTA Button Row */}
-            <div className="hero-action-buttons-row">
-              <Link to="/report" className="hero-btn-primary">
-                <Icon name="report" size={18} />
-                <span>{text.reportButton}</span>
-                <Icon name="arrow-right" size={16} />
+            {/* Dual CTA Button Row with Amicro Magnetic Pull */}
+            <div className="hero-action-buttons-row flex items-center gap-4">
+              <Link to="/report">
+                <MagneticButton className="hero-btn-primary">
+                  <Icon name="report" size={18} />
+                  <span>{text.reportButton}</span>
+                  <Icon name="arrow-right" size={16} />
+                </MagneticButton>
               </Link>
 
-              <Link to="/map" className="hero-btn-secondary">
-                <Icon name="map" size={18} />
-                <span>{text.exploreMap}</span>
+              <Link to="/map">
+                <MagneticButton className="hero-btn-secondary !bg-[#1E3E62] !border-[#1E3E62]">
+                  <Icon name="map" size={18} />
+                  <span>{text.exploreMap}</span>
+                </MagneticButton>
               </Link>
             </div>
           </div>
@@ -1541,6 +1618,13 @@ function HomeV2() {
           </div>
         </div>
       )}
+
+      {/* ================= MODAL: CITIZEN PROFILE & GRIEVANCE STATS ================= */}
+      <CitizenProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        onLogout={handleLogout}
+      />
     </div>
   );
 }

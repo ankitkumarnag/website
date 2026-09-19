@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   citizenLogout,
   clearCitizenSession,
-  getCitizenComplaints,
+  getAllComplaints,
   getCitizenToken,
   getCitizenUser,
 } from "../services/api";
 import Icon from "../components/Icons";
+import CitizenProfileModal from "../components/CitizenProfileModal";
 import "./MyComplaints.css";
 
 const statusSteps = [
@@ -53,6 +54,10 @@ function MyComplaints() {
 
   const [complaints, setComplaints] = useState([]);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [scopeFilter, setScopeFilter] = useState("all"); // "all" | "my"
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -66,7 +71,8 @@ function MyComplaints() {
     setLoadError("");
 
     try {
-      const response = await getCitizenComplaints();
+      // Fetch all public/registered complaints so anyone can track all grievances
+      const response = await getAllComplaints();
 
       setComplaints(
         Array.isArray(response.complaints)
@@ -75,22 +81,9 @@ function MyComplaints() {
       );
     } catch (error) {
       console.error(error);
-
-      if (
-        String(error.message || "")
-          .toLowerCase()
-          .includes("authentication")
-      ) {
-        clearCitizenSession();
-        navigate("/login", {
-          replace: true,
-        });
-        return;
-      }
-
       setLoadError(
         error.message ||
-          "Unable to load your complaints. Please make sure the NagarSwar backend is running."
+          "Unable to load complaints. Please make sure the NagarSwar backend is running."
       );
     } finally {
       setLoading(false);
@@ -110,42 +103,46 @@ function MyComplaints() {
     });
   }
 
-  if (!citizenToken) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
-  }
+  // Count how many complaints were submitted by this logged-in user
+  const myComplaintsCount = useMemo(() => {
+    if (!citizenUser?.id) return 0;
+    return complaints.filter((c) => c.citizenId === citizenUser.id).length;
+  }, [complaints, citizenUser]);
 
   const filteredComplaints = useMemo(() => {
     const searchText = search.toLowerCase().trim();
 
-    if (!searchText) {
-      return complaints;
-    }
-
     return complaints.filter((complaint) => {
-      return (
-        complaint.id
-          ?.toLowerCase()
-          .includes(searchText) ||
-        complaint.title
-          ?.toLowerCase()
-          .includes(searchText) ||
-        complaint.category
-          ?.toLowerCase()
-          .includes(searchText) ||
-        complaint.status
-          ?.toLowerCase()
-          .includes(searchText) ||
-        complaint.location
-          ?.toLowerCase()
-          .includes(searchText)
-      );
+      // Scope filter: If user chose "my", only show their complaints
+      if (scopeFilter === "my" && citizenUser?.id) {
+        if (complaint.citizenId !== citizenUser.id) {
+          return false;
+        }
+      }
+
+      const matchesSearch =
+        !searchText ||
+        complaint.id?.toLowerCase().includes(searchText) ||
+        complaint.title?.toLowerCase().includes(searchText) ||
+        complaint.category?.toLowerCase().includes(searchText) ||
+        complaint.status?.toLowerCase().includes(searchText) ||
+        complaint.location?.toLowerCase().includes(searchText);
+
+      const matchesCategory =
+        categoryFilter === "All" ||
+        complaint.category === categoryFilter ||
+        (complaint.category || "").toLowerCase().includes(categoryFilter.toLowerCase());
+
+      const matchesStatus =
+        statusFilter === "All" ||
+        complaint.status === statusFilter ||
+        (statusFilter === "Active" && (complaint.status === "Assigned" || complaint.status === "In Progress")) ||
+        (statusFilter === "Under Review" && complaint.status === "Under Review") ||
+        (statusFilter === "Resolved" && complaint.status === "Resolved");
+
+      return matchesSearch && matchesCategory && matchesStatus;
     });
-  }, [complaints, search]);
+  }, [complaints, search, categoryFilter, statusFilter, scopeFilter, citizenUser]);
 
   function formatDate(date) {
     if (!date) {
@@ -173,69 +170,120 @@ function MyComplaints() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "12px",
+            gap: "10px",
           }}
         >
-          {citizenUser && (
-            <span
-              style={{
-                color: "var(--text-secondary)",
-                fontSize: "13px",
-                fontWeight: "700",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <Icon name="user" size={15} />
-              {citizenUser.firstName}
-            </span>
+          {citizenUser ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setShowProfileModal(true)}
+                className="track-profile-btn"
+                title="View your citizen profile and grievances"
+              >
+                <Icon name="user" size={15} />
+                <span>{citizenUser.firstName || "My Profile"}</span>
+              </button>
+
+              <Link to="/" className="track-home-link">
+                ← Back to Home
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="track-logout-btn"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/" className="track-home-link">
+                ← Back to Home
+              </Link>
+
+              <Link to="/login" className="track-login-btn">
+                <Icon name="log-in" size={15} />
+                <span>Citizen Login</span>
+              </Link>
+            </>
           )}
-
-          <Link to="/" className="track-home-link">
-            ← Back to Home
-          </Link>
-
-          <button
-            type="button"
-            onClick={handleLogout}
-            style={{
-              padding: "9px 13px",
-              color: "#ffffff",
-              background: "#0a8f6a",
-              border: "0",
-              borderRadius: "9px",
-              fontWeight: "800",
-              cursor: "pointer",
-            }}
-          >
-            Logout
-          </button>
         </div>
       </header>
 
       <main className="track-main">
         <section className="track-heading">
           <p className="track-label">
-            COMPLAINT TRACKING
+            CIVIC GRIEVANCE TRACKING
           </p>
 
-          <h1>Track your reported issues.</h1>
+          <h1>Track Reported Civic Issues</h1>
 
           <p>
-            Search using your complaint reference number,
-            title, category, status or location.
+            Real-time public grievance resolution tracking. Search using reference ID,
+            title, category, status, or landmark to inspect status.
           </p>
 
+          {citizenUser && (
+            <div className="track-scope-tabs">
+              <button
+                type="button"
+                className={`track-scope-tab ${scopeFilter === "all" ? "active" : ""}`}
+                onClick={() => setScopeFilter("all")}
+              >
+                🌐 All City Complaints ({complaints.length})
+              </button>
+              <button
+                type="button"
+                className={`track-scope-tab ${scopeFilter === "my" ? "active" : ""}`}
+                onClick={() => setScopeFilter("my")}
+              >
+                👤 My Reported Issues ({myComplaintsCount})
+              </button>
+            </div>
+          )}
+
           <div className="track-controls">
-            <input
-              type="search"
-              placeholder="Search complaint ID or title..."
-              value={search}
-              onChange={(event) =>
-                setSearch(event.target.value)
-              }
-            />
+            <div className="track-search-wrapper">
+              <Icon name="search" size={16} />
+              <input
+                type="search"
+                placeholder="Search reference ID, keyword, landmark..."
+                value={search}
+                onChange={(event) =>
+                  setSearch(event.target.value)
+                }
+              />
+            </div>
+
+            <select
+              className="track-filter-select"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              aria-label="Filter by Category"
+            >
+              <option value="All">📁 All Categories</option>
+              <option value="Road and Pothole">🛣️ Road & Pothole</option>
+              <option value="Sanitation and Waste">🧹 Sanitation & Waste</option>
+              <option value="Water Supply">💧 Water Supply</option>
+              <option value="Electricity">⚡ Electricity</option>
+              <option value="Public Healthcare">🏥 Public Healthcare</option>
+              <option value="Fire and Emergency">🚨 Fire & Emergency</option>
+              <option value="Other Public Issue">📋 Other Issues</option>
+            </select>
+
+            <select
+              className="track-filter-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              aria-label="Filter by Status"
+            >
+              <option value="All">⚡ All Statuses</option>
+              <option value="Under Review">⏳ Under Review</option>
+              <option value="Active">🚧 Active / Assigned</option>
+              <option value="Resolved">✅ Resolved</option>
+            </select>
 
             <Link
               to="/report"
@@ -440,6 +488,14 @@ function MyComplaints() {
           )}
         </section>
       </main>
+
+      {citizenUser && (
+        <CitizenProfileModal
+          isOpen={showProfileModal}
+          onClose={() => setShowProfileModal(false)}
+          onLogout={handleLogout}
+        />
+      )}
     </div>
   );
 }

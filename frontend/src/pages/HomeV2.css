@@ -192,6 +192,51 @@
   color: #d96517;
 }
 
+.nav-logout-item {
+  color: #e11d48 !important;
+}
+
+.nav-logout-item:hover {
+  background: rgba(244, 63, 94, 0.1) !important;
+  color: #be123c !important;
+}
+
+.nav-login-item {
+  color: #0284c7 !important;
+}
+
+.nav-login-item:hover {
+  background: rgba(2, 132, 199, 0.1) !important;
+  color: #0369a1 !important;
+}
+
+.pill-user-profile-btn,
+.pill-auth-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 180ms ease;
+  border: 1px solid rgba(210, 180, 150, 0.6);
+  background: #ffffff;
+  color: #0b192c;
+}
+
+.pill-user-profile-btn:hover,
+.pill-auth-btn:hover {
+  background: #0b192c;
+  color: #ffffff;
+  border-color: #0b192c;
+  transform: translateY(-1px);
+}
+
+
 .pill-nav-links {
   display: flex;
   align-items: center;

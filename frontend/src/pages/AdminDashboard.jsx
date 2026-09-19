@@ -327,6 +327,16 @@ const adminReviewStyles = {
   },
 };
 
+const MUNICIPAL_CATEGORIES = [
+  { value: "Road and Pothole", label: "Road & Pothole Damage", icon: "road" },
+  { value: "Sanitation and Waste", label: "Sanitation & Solid Waste", icon: "trash" },
+  { value: "Electricity", label: "Electricity & Utility Poles", icon: "zap" },
+  { value: "Public Healthcare", label: "Public Healthcare Impact", icon: "activity" },
+  { value: "Water Supply", label: "Water Supply & Sewerage", icon: "droplet" },
+  { value: "Fire and Emergency", label: "Fire & Structural Emergency", icon: "flame" },
+  { value: "Other Public Issue", label: "General Municipal Concern", icon: "building" },
+];
+
 function AdminDashboard() {
   const [complaints, setComplaints] =
     useState([]);
@@ -339,6 +349,9 @@ function AdminDashboard() {
 
   const [search, setSearch] =
     useState("");
+
+  const [categoryFilter, setCategoryFilter] =
+    useState("All");
 
   const [
     statusFilter,
@@ -505,6 +518,13 @@ function AdminDashboard() {
               ?.toLowerCase()
               .includes(searchText);
 
+          const matchesCategory =
+            categoryFilter === "All" ||
+            complaint.category === categoryFilter ||
+            (complaint.category || "")
+              .toLowerCase()
+              .includes((categoryFilter || "").toLowerCase());
+
           const matchesStatus =
             statusFilter === "All" ||
             complaint.status ===
@@ -512,6 +532,7 @@ function AdminDashboard() {
 
           return (
             matchesSearch &&
+            matchesCategory &&
             matchesStatus
           );
         }
@@ -519,6 +540,7 @@ function AdminDashboard() {
     }, [
       complaints,
       search,
+      categoryFilter,
       statusFilter,
     ]);
 
@@ -720,7 +742,7 @@ function AdminDashboard() {
         <section className="admin-tools">
           <input
             type="search"
-            placeholder="Search ID, title, category, department..."
+            placeholder="Search ID, title, landmark, department..."
             value={search}
             onChange={(event) =>
               setSearch(
@@ -729,6 +751,32 @@ function AdminDashboard() {
             }
           />
 
+          {/* 1. Municipal Category Filter FIRST */}
+          <select
+            value={categoryFilter}
+            onChange={(event) =>
+              setCategoryFilter(
+                event.target.value
+              )
+            }
+            aria-label="Filter by Municipal Category"
+          >
+            <option value="All">
+              📁 All Categories
+            </option>
+            {MUNICIPAL_CATEGORIES.map(
+              (cat) => (
+                <option
+                  value={cat.value}
+                  key={cat.value}
+                >
+                  {cat.label}
+                </option>
+              )
+            )}
+          </select>
+
+          {/* 2. Resolution Status Filter SECOND */}
           <select
             value={statusFilter}
             onChange={(event) =>
@@ -736,11 +784,11 @@ function AdminDashboard() {
                 event.target.value
               )
             }
+            aria-label="Filter by Resolution Status"
           >
             <option value="All">
-              All Statuses
+              🔄 All Statuses
             </option>
-
             {STATUSES.map(
               (status) => (
                 <option
@@ -753,6 +801,38 @@ function AdminDashboard() {
             )}
           </select>
         </section>
+
+        {/* Category Filter Badges / Quick Tabs */}
+        <div className="admin-category-pills-row">
+          <button
+            type="button"
+            onClick={() => setCategoryFilter("All")}
+            className={`cat-pill ${categoryFilter === "All" ? "active" : ""}`}
+          >
+            <Icon name="grid" size={13} />
+            <span>All Categories ({complaints.length})</span>
+          </button>
+
+          {MUNICIPAL_CATEGORIES.map((cat) => {
+            const count = complaints.filter(
+              (c) => c.category === cat.value || (c.category || "").toLowerCase().includes(cat.value.toLowerCase())
+            ).length;
+            const isActive = categoryFilter === cat.value;
+
+            return (
+              <button
+                key={cat.value}
+                type="button"
+                onClick={() => setCategoryFilter(cat.value)}
+                className={`cat-pill ${isActive ? "active" : ""}`}
+              >
+                <Icon name={cat.icon} size={13} />
+                <span>{cat.label}</span>
+                {count > 0 && <span className="cat-count-badge">{count}</span>}
+              </button>
+            );
+          })}
+        </div>
 
         {loading ? (
           <section className="admin-message">
